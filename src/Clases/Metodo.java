@@ -171,11 +171,14 @@ public class Metodo implements TipoValidable, Serializable {
 	public String toString () { // Metodo para definir como se va a mostrar la informacion del metodo
 		String cadenaSalida = this.modificadorAcceso + " " + this.nombre + "(";
 
+
 		for (Parametro p : this.parametros) {
 			cadenaSalida += p.getNombre() + p.getTipoDato() + ", ";
 		}
-
-		cadenaSalida = cadenaSalida.substring(0, cadenaSalida.length() - 2) + ")" + ": " + this.tipoRetorno;
+		if (this.parametros.size() != 0)
+			cadenaSalida = cadenaSalida.substring(0, cadenaSalida.length() - 2) + ")" + ": " + this.tipoRetorno;
+		else
+			cadenaSalida += ")" + ": " + this.tipoRetorno;
 
 		return cadenaSalida;
 	}

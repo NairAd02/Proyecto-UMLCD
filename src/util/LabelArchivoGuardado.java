@@ -78,7 +78,7 @@ public class LabelArchivoGuardado extends JLabel{
 			diagrama = (Diagrama) ManejoDirectorios.recuperarArchivo(getText());
 			Diagrama.setInstance(diagrama);
 			pe.setDiagrama(diagrama);
-			actualizarLienzo();
+			Principal.getInstancie().actualizarLienzo();
 			
 
 		} catch (FileNotFoundException e1) {
@@ -93,28 +93,6 @@ public class LabelArchivoGuardado extends JLabel{
 		}
 	}
 	
-	public void actualizarLienzo(){
-		ArrayList<Clase> clases = Diagrama.getInstance().getClases();
-		Lienzo lienzo = pe.getLienzo();
-		
-		
-		
-		for (Clase c : clases) {
-			lienzo.addPanelClase(c, pe);		
-		}
-		
-		lienzo.setHerencias(Diagrama.getInstance().getFlechasHerencia());
-		pe.accionesLienzo();
-		pe.getScrollPane().setViewportView(pe.getLienzo());
-		pe.habilitarPrograma();
-		pe.getLienzo().repaint();
-		pe.getLienzo().revalidate();
-		pe.repaint();
-		pe.revalidate();
-		pe.setEnabled(true);
-		di.dispose();
-		
-	}
 
 
 }

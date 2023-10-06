@@ -2,8 +2,6 @@ package Clases;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -21,9 +19,6 @@ public abstract class Clase implements Serializable  {
 	protected String nombre;
 	protected ArrayList<Metodo> metodos;
 	protected ArrayList<Atributo> atributos;
-	@JsonIgnore
-	protected Clase padre;
-	protected ArrayList<Clase> hijos;
 	protected String color;
 	protected int posicionX;
 	protected int posicionY;
@@ -35,8 +30,6 @@ public abstract class Clase implements Serializable  {
 	public Clase(String nombre, int posicionX, int posicionY, int dimensionX, int dimensionY) throws Exception {
 
 		this.setNombre(nombre);
-		this.padre=null;
-		this.hijos=new ArrayList<Clase>();
 		this.atributos = new ArrayList<Atributo>();
 		this.metodos = new ArrayList<Metodo>();
 		this.color = "Gris";
@@ -72,27 +65,33 @@ public abstract class Clase implements Serializable  {
 		this.dimensionY = dimensionY;
 	}
 
-	public void setHijos(ArrayList<Clase> hijos) {
-		this.hijos = hijos;
-	}
-
+	
 	public int getPosicionX() {
 		return posicionX;
 	}
-
-
-
 	public void setPosicionX(int posicionX) {
 		this.posicionX = posicionX;
 	}
-
-
 
 	public int getPosicionY() {
 		return posicionY;
 	}
 
+	public ArrayList<Metodo> getMetodos() {
+		return metodos;
+	}
 
+	public void setMetodos(ArrayList<Metodo> metodos) {
+		this.metodos = metodos;
+	}
+
+	public ArrayList<Atributo> getAtributos() {
+		return atributos;
+	}
+
+	public void setAtributos(ArrayList<Atributo> atributos) {
+		this.atributos = atributos;
+	}
 
 	public void setPosicionY(int posicionY) {
 		this.posicionY = posicionY;
@@ -103,18 +102,6 @@ public abstract class Clase implements Serializable  {
 	public void setColor(String color) {
 		this.color = color;
 	}
-
-
-
-	public ArrayList<Clase> getHijos() {
-
-		return this.hijos;
-	}
-
-	public Clase getPadre() {
-		return this.padre;
-	}
-
 
 
 	public String getNombre() {
@@ -130,22 +117,7 @@ public abstract class Clase implements Serializable  {
 			throw new Exception("Error");
 	}
 
-	public void addPadre(Clase padre){
-
-		if(padre!=null)
-			this.padre=padre;
-		else
-			throw new IllegalArgumentException();
-
-	}
-
-	public void addHijo(Clase hijo){
-
-		this.hijos.add(hijo);
-
-	}
-
-
+	
 	public void addMetodo(Metodo metodo) throws Exception{
 		if(this.validarMetodo(metodo)){
 			this.metodos.add(metodo);
@@ -181,25 +153,7 @@ public abstract class Clase implements Serializable  {
 		return x;
 	}
 
-	private boolean validarAtributo(Atributo atributo, int posicionIgnorar){
-
-		boolean x = true;
-
-		if(atributo==null)
-			x= false;
-		else{
-			for(int i=0;i<this.atributos.size()&&x==true;i++){
-				if(atributo.getNombre().equals(this.atributos.get(i).getNombre()) && i!= posicionIgnorar) 
-					x = false;
-			}
-		}
-
-		return x;
-
-	}
-
-
-
+	
 	protected boolean validarMetodo(Metodo metodo){
 		boolean x=true;
 
@@ -243,43 +197,8 @@ public abstract class Clase implements Serializable  {
 		return x;
 	}
 
-	public boolean isMiPadre(Clase clase){
-		boolean x = false;
-
-		if(this.padre!=null && this.padre.equals(clase))
-			x = true;
-
-
-
-		return x;
-
-	}
-
-	public void modificarHijo(Clase claseVieja, Clase claseNueva){
-		boolean parada = false;
-		for(int i = 0; i<this.hijos.size() && !parada; i++){
-			if(this.hijos.get(i).equals(claseVieja)){
-				this.hijos.set(i, claseNueva);
-				parada = true;
-			}
-		}
-	}
-
-
-
-	public boolean isMiHijo(Clase clase){
-		boolean validator = false;
-
-		for(int i = 0; i<this.hijos.size(); i++){
-			if(this.hijos.get(i).equals(clase))
-				validator = true;
-		}
-
-		return validator;
-	}
-
-
-
+// METODO A IMPLEMENTAR EN LA CLASE DIAGRAMA 
+	/*
 	public ArrayList<Atributo> ObtenerAtributos(){
 		ArrayList<Atributo> atributos = new ArrayList<Atributo>();
 
@@ -442,9 +361,7 @@ public abstract class Clase implements Serializable  {
 		return this.metodos.size();
 	}
 
-	public void eliminarAtributo(Atributo atributo){
-		this.atributos.remove(atributo);
-	}
+	
 
 	public void eliminarPadre(){
 		this.padre = null;
@@ -454,91 +371,9 @@ public abstract class Clase implements Serializable  {
 		this.hijos.remove(clase);
 	}
 
-	public void elminarMetodo(Metodo metodo){
-		this.metodos.remove(metodo);
-	}
+	
 
-	public void modificarAtributo(String nombreAtributo, Atributo atributo) throws Exception{
-		int posicionAModificar = this.buscarAtributoPosicion(nombreAtributo);
-		if(posicionAModificar!=-1){
-			if(this.validarAtributo(atributo,posicionAModificar))
-				this.atributos.set( posicionAModificar, atributo);
-			else
-				throw new Exception();
-		}
-		else{
-			throw new IllegalArgumentException();
-		}
-
-	}
-
-	public void modificarMetodo(String nombreMetodo, ArrayList<String> parametros, Metodo metodo) throws Exception{
-		int posicionAModificar = this.buscarMetodoPosicion(nombreMetodo, parametros);
-		if(posicionAModificar!=-1){
-			if(this.validarMetodo(metodo, posicionAModificar))
-				this.metodos.set(posicionAModificar, metodo);
-			else
-				throw new Exception("No cumple sobreCarga");
-		}
-		else{
-
-			throw new IllegalArgumentException();
-		}
-	}
-
-	public void cambiarMetodosAbstractosAConcretos(){
-
-		for(Metodo a: this.metodos){
-			if(a.isAbstracto())
-				a.setAbstracto(false);
-		}
-
-	}
-
-	private Atributo buscarAtributo(String nombreAtributo){
-		Atributo atributo = null;
-		boolean x = false;
-		for(int i=0; i<this.atributos.size() && x==false;i++){
-			if(nombreAtributo.equals(this.atributos.get(i).getNombre())){
-				atributo = this.atributos.get(i);
-
-				x=true;				
-			}
-		}
-
-		return atributo;
-
-	}
-
-	private int buscarAtributoPosicion(String nombreAtributo){
-		int posicion = -1;
-		boolean x = false;
-		for(int i=0; i<this.atributos.size() && x==false;i++){
-			if(nombreAtributo.equals(this.atributos.get(i).getNombre())){
-				posicion = i;
-
-				x=true;				
-			}
-		}
-
-		return posicion;
-	}
-
-	private Metodo buscarMetodo(String nombreMetodo, ArrayList<String> parametros){
-		Metodo metodo = null;
-		boolean x = false;
-
-		for(int i=0;i<this.metodos.size() && x==false;i++){
-			if(nombreMetodo.equals(this.metodos.get(i).getNombre()) && this.metodos.get(i).comprobarParametros(parametros) ){
-				metodo = this.metodos.get(i);
-				x=true;
-
-			}
-		}
-
-		return metodo;
-	}
-
+	
 	public boolean isDescendiente(Clase clase){
 		boolean veredicto = false;
 
@@ -560,31 +395,37 @@ public abstract class Clase implements Serializable  {
 
 	}
 
-	protected int buscarMetodoPosicion(String nombreMetodo, ArrayList<String> parametros){
-		int posicion = -1;
-		boolean x = false;
-
-		for(int i=0;i<this.metodos.size() && x==false;i++){
-			if(nombreMetodo.equals(this.metodos.get(i).getNombre()) && this.metodos.get(i).comprobarParametros(parametros)){
-				posicion = i;
-				x=true;
-
-			}
-		}
-
-		return posicion;
-	}
+	*/
+	
+	// METODOS PARA COMPROBAR IGUALDAD EN EL SISTEMA DE GUARDADO
 
 	public boolean equals(Clase c){
 		boolean verificador = false;
 
-		if(this.equalsNombre(c) && this.equalsAtributos(c) && this.equalsHijos(c) && this.equalsMetodos(c) && this.equalsColor(c))
+		if(this.equalsNombre(c) && this.equalsAtributos(c) && this.equalsMetodos(c) && this.equalsColor(c))
 			verificador = true;
 
 		return verificador;
 
 	}
+	
+	public void elminarMetodo(Metodo metodo){
+		this.metodos.remove(metodo);
+	}
+	
+	public void cambiarMetodosAbstractosAConcretos(){
 
+		for(Metodo a: this.metodos){
+			if(a.isAbstracto())
+				a.setAbstracto(false);
+		}
+
+	}
+	
+	public void eliminarAtributo(Atributo atributo){
+		this.atributos.remove(atributo);
+	}
+	
 	private boolean equalsNombre(Clase c){
 		boolean verificador = false;
 
@@ -629,26 +470,6 @@ public abstract class Clase implements Serializable  {
 
 	}
 
-	private boolean equalsHijos(Clase c){
-		boolean verificador = true;
-		ArrayList<Clase> cc = c.getHijos(); 
-
-		if(this.hijos.size() == cc.size()){
-
-			for (int i = 0; i < this.hijos.size() && verificador; i++) {
-
-				if(!this.hijos.get(i).equals(cc.get(i)))
-					verificador = false;
-				System.out.println("as");
-			}
-		}
-		else
-			verificador = false;
-
-		return verificador;
-
-	}
-
 	private boolean equalsColor(Clase c){
 		boolean verificador = false;
 
@@ -659,26 +480,6 @@ public abstract class Clase implements Serializable  {
 
 	}
 
-
-
-	public ArrayList<Metodo> getMetodos() {
-		return metodos;
-	}
-
-	public void setMetodos(ArrayList<Metodo> metodos) {
-		this.metodos = metodos;
-	}
-
-	public ArrayList<Atributo> getAtributos() {
-		return atributos;
-	}
-
-	public void setAtributos(ArrayList<Atributo> atributos) {
-		this.atributos = atributos;
-	}
-
-	public void setPadre(Clase padre) {
-		this.padre = padre;
-	}
+	// FIN DE METODOS PARA COMPROBAR IGUALDAD EN EL SISTEMA DE GUARDADO
 
 }

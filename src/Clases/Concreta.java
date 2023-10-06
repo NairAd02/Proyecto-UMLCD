@@ -34,21 +34,5 @@ public class Concreta extends Clase implements Serializable {
 		}
 	}
 	
-	public void modificarMetodo(String nombreMetodo, ArrayList<String> parametros, Metodo metodo) throws Exception{
-		int posicionAModificar = this.buscarMetodoPosicion(nombreMetodo, parametros);
-		if(posicionAModificar!=-1){
-			if(this.validarMetodo(metodo, posicionAModificar))
-				if(!metodo.isAbstracto())
-				this.metodos.set(posicionAModificar, metodo);
-				else
-					throw new Exception("Metodo Abstracto");
-					
-			else
-				throw new Exception("No cumple sobreCarga");
-		}
-		else{
-			throw new IllegalArgumentException();
-		}
-	}
-
+	
 }

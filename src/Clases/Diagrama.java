@@ -7,6 +7,7 @@ import java.util.Iterator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import cu.edu.cujae.ceis.graph.LinkedGraph;
+import cu.edu.cujae.ceis.graph.interfaces.ILinkedWeightedEdgeDirectedGraph;
 import cu.edu.cujae.ceis.graph.interfaces.ILinkedWeightedVertexDirectedGraph;
 import cu.edu.cujae.ceis.graph.vertex.Vertex;
 import util.Flecha;
@@ -18,7 +19,7 @@ public class Diagrama implements  Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private ILinkedWeightedVertexDirectedGraph grafoClases;
+	private ILinkedWeightedEdgeDirectedGraph grafoClases; // HACER IMPLEMENTACION PROPIA
 	private String nombre;
 	@JsonIgnore
 	private static Diagrama diagrama;
@@ -72,15 +73,16 @@ public class Diagrama implements  Serializable {
 	}
 
 
-	public ILinkedWeightedVertexDirectedGraph getGrafoClases() {
+	public ILinkedWeightedEdgeDirectedGraph getGrafoClases() {
 		return grafoClases;
 	}
 
-	public void setGrafoClases(ILinkedWeightedVertexDirectedGraph grafoClases) {
+	public void setGrafoClases(ILinkedWeightedEdgeDirectedGraph grafoClases) {
 		this.grafoClases = grafoClases;
 	}
 
 
+	// OPERACIONES SOBRE EL DIAGRAMA
 	public void addClase(Clase clase){
 
 		if(this.validar(clase))
@@ -100,371 +102,231 @@ public class Diagrama implements  Serializable {
 			if(clase.getNombre().equalsIgnoreCase(claseAux.getNombre()))
 				validator = false;
 		}
-			
-		return validator;
-	}
-
-	private boolean validar(Clase clase, int posicionIgnorar){
-
-		boolean validator = true;
-
-		if(clase==null)
-			validator= false;
-		else{
-			for(int i=0;i<this.clases.size()&& validator==true;i++){
-				if(clase.getNombre().equals(this.clases.get(i).getNombre()) && i!= posicionIgnorar) 
-					validator = false;
-
-
-			}
-		}
 
 		return validator;
-
-	}
-// OPERACIONES HERENCIA
-	public Clase obtenerPadreClase(String nombreClase){
-		return this.buscarClase(nombreClase).getPadre();
 	}
 
-	public void addHerencia(String nombreClasePadre, String nombreClaseHija) throws Exception{
-		
-	}
 
-	public ArrayList<Clase> buscarHijosdeClase(String nombreClase){
-		return this.buscarClase(nombreClase).getHijos();
-
-	}
-//FIN OPERACIONES HERENCIA
-	
-	
-// OPERACIONES SOBRE LAS CLASES
-	public void addAtributo(String nombreClase, Atributo atributo) throws Exception{
-		buscarClase(nombreClase).addAtributo(atributo);
-	}
-
-	public void addMetodo(String nombreClase, Metodo metodo) throws Exception{
-		this.buscarClase(nombreClase).addMetodo(metodo);
-	}
-
-	public void modificarAtributo(String nombreClase, String nombreAtributo, Atributo atributo) throws Exception{
-		this.buscarClase(nombreClase).modificarAtributo(nombreAtributo, atributo);
-	}
-
-	public void modificarMetodo(String nombreClase, String nombreMetodo, ArrayList<String> parametros, Metodo metodo) throws Exception{
-		this.buscarClase(nombreClase).modificarMetodo(nombreMetodo, parametros, metodo);
-	}
-
-	public void modificarClase(String nombreClase, Clase claseNueva) throws Exception{
-		boolean validator = false;
-
-		for(int i=0; i<this.clases.size() && validator == false;i++){
-			if(nombreClase.equalsIgnoreCase(this.clases.get(i).getNombre())){
-				if(this.validar(claseNueva, i)){
-					claseNueva.setAtributos(this.clases.get(i).getAtributos());
-					claseNueva.setMetodos(this.clases.get(i).getMetodos());
-					claseNueva.setPadre(this.clases.get(i).getPadre());
-					claseNueva.setPosicionX(this.clases.get(i).getPosicionX());
-					claseNueva.setPosicionY(this.clases.get(i).getPosicionY());
-					this.modificarClaseHerencia(this.clases.get(i), claseNueva);
-					this.clases.set(i,claseNueva);
-					validator = true;
-				}
-				else{			
-					throw new Exception("Clase mismo nombre");			
-				}
-			}
-		}
-
-	}
-	
-	public Clase buscarClase(String nombre){
+	public Clase buscarClase(String nombre){ // Buscar una clase en el grafo segun su nombre
 		Clase clase = null;
-		boolean validator = false;
-		for(int i=0; i<this.clases.size() && validator == false;i++){
-			if(nombre.equalsIgnoreCase(this.clases.get(i).getNombre())){
-				clase = this.clases.get(i);
-				validator = true;	
-			}
+		Iterator<Vertex> iter = this.grafoClases.getVerticesList().iterator();
+
+		while (iter.hasNext() && clase == null) {
+			Clase claseAux = (Clase) iter.next().getInfo();
+			if (claseAux.getNombre().equalsIgnoreCase(nombre))
+				clase = claseAux;
 		}
 
 		return clase;
 	}
 
 
+	public int posClase(Clase clase){ // Buscar una clase en el grafo segun su referencia
+		int pos = -1;
+		Iterator<Vertex> iter = this.grafoClases.getVerticesList().iterator();
 
-	public void eliminarClase(String nombre){
-		Clase claseEliminar = this.buscarClase(nombre);
-
-		if(claseEliminar!=null){
-			this.eliminarPadre(claseEliminar);
-			this.eliminarHijo(claseEliminar);
-			this.clases.remove(claseEliminar);
-			this.eliminarRelaciones(nombre);
+		while (iter.hasNext() && pos == -1) {
+			Clase claseAux = (Clase) iter.next().getInfo();
+			if (claseAux.equals(clase))
+				clase = claseAux;
 		}
-		else
-			throw new IllegalArgumentException();
+
+		return pos;
 	}
-	
-	public void eliminarClase (Clase clase) {
+
+	public void eliminarClase (Clase clase) { // Metodo para eliminar una clase del grafo
 		this.grafoClases.deleteVertex(this.grafoClases.getVerticesList().indexOf(clase)); // implementacion temporal
 	}
+
+	// FIN OPERACIONES SOBRE EL DIAGRAMA
+
+	// OPERACIONES RELACIONES
+	// OPERACIONES HERENCIA
+	public Clase obtenerPadreClase(String nombreClase){
+		return null;
+	}
+// AKIIIII DARIOOOOOOOOOOOO
+	public void addRelacionHerencia(Clase clasePadre, Clase claseHija) throws Exception{
+		this.grafoClases.insertWEdgeDG(this.grafoClases.getVerticesList().indexOf(clasePadre), this.grafoClases.getVerticesList().indexOf(claseHija), determinarBoundsRelacionHerencia(clasePadre, claseHija));
+	}
+
+	public Relacion determinarBoundsRelacionHerencia (Clase clasePadre, Clase claseHija) {
+		// DADA LA INFORMACION DE lAS DOS CLASES, O SEA SUS POSICIONES Y DIMENSIONES (MIRA LOS ATRIBUTOS DE LA CLASE CLASE)
+		// TRATA DE CREAR UN ALGORITMO QUE CREE UN OBJETO RELACION YA SEA HERENCIA O COMPOSICION QUE TENGA LAS POSICIONES ADECUADAS PARA QUE SE PINTE LA RELACION DE FORMA ADECUADA
+		return null;
+	}
+
+	public ArrayList<Clase> buscarHijosdeClase(String nombreClase){
+		return null;
+
+	}
 	
-	//FIN OPERACIONES SOBRE LAS CLASES
-
-
-	public void CambiarMetodosAbstractosAConcretos(String nombreClase){
-		
-		this.buscarClase(nombreClase).cambiarMetodosAbstractosAConcretos();
-	}
-
+	 
+	// FIN OPERACIONES HERENCIA
 	
+	// PARTE ADRIAN IMPLEMENTAR TODOS LOS DEMAS METODOS BASADOS EN LAS OPERACIONES SOBRE LAS RELACIONES
+	
+	// FIN OPERACIONES RELACIONES
 
-	public void eliminarPadre(Clase clase){
 
-		for(int i = 0; i < this.clases.size(); i++){
-			if(this.clases.get(i).isMiPadre(clase)){
-				System.out.println("Se elimino padre");
-				this.clases.get(i).eliminarPadre();
-			}
-		}
+
+	public int totalClases(){ // Metodo para obtener la cantidad de clases del diagrama
+		return this.grafoClases.getVerticesList().size();
 	}
 
-	public void eliminarHijo(Clase clase){
-
-		for(int i = 0; i < this.clases.size(); i++){
-			if(this.clases.get(i).isMiHijo(clase)){
-				System.out.println("Se elimino hijo");
-				this.clases.get(i).eliminarHijo(clase);
-			}
-		}
-
-	}
-
-
-	public int totalClases(){
-		return this.clases.size();
-	}
-
-	public int cantClasesConcretas(){
+	public int cantClasesConcretas(){ // Metodo para obtener la cantidad de clases concretas del diagrama
 		int count = 0;
+		Iterator<Vertex> iter = this.grafoClases.getVerticesList().iterator();
 
-		for (Clase a : this.clases) {
-			if(a instanceof Concreta)
-				count++;		
+		while (iter.hasNext() ) {
+			Clase claseAux = (Clase) iter.next().getInfo();
+			if (claseAux instanceof Concreta)
+				count++;
 		}
 
+		return count;
+	}
+
+	public int cantClasesAbstractas(){ // Metodo para obtener la cantidad de clases abstractas del diagrama
+		int count = 0;
+		Iterator<Vertex> iter = this.grafoClases.getVerticesList().iterator();
+
+		while (iter.hasNext() ) {
+			Clase claseAux = (Clase) iter.next().getInfo();
+			if (claseAux instanceof Abstracta)
+				count++;
+		}
 
 		return count;
 
 	}
 
-	public int cantClasesAbstractas(){
-		int count = 0;
+	/*public int totalAtributos(){ // Metodo para obtener la cantidad de atributos
+	int cant = 0;
 
-		for (Clase a : this.clases) {
-			if(a instanceof Abstracta)
-				count++;	
+	for (Clase a : this.clases) {
 
-		}
-
-		return count;
+		cant+=a.cantAtributos();
 
 	}
 
-	public int totalAtributos(){
-		int cant = 0;
+	return cant;
 
-		for (Clase a : this.clases) {
+}
 
-			cant+=a.cantAtributos();
+public int totalMetodos(){
+	int cant = 0;
 
-		}
+	for (Clase a : this.clases) {
 
-		return cant;
-
-	}
-
-	public int totalMetodos(){
-		int cant = 0;
-
-		for (Clase a : this.clases) {
-
-			cant+=a.cantMetodos();
-
-		}
-
-		return cant;
+		cant+=a.cantMetodos();
 
 	}
 
-	public int cantMetodosConcretos(){
-		int cant = 0;
+	return cant;
 
-		for (Clase a : this.clases) {
+}
 
-			cant+=a.cantMetodosConcretos();
+public int cantMetodosConcretos(){
+	int cant = 0;
 
-		}
+	for (Clase a : this.clases) {
 
-		return cant;
-
-	}
-
-	public int cantMetodosAbstractos(){
-		int cant = 0;
-
-		for (Clase a : this.clases) {
-
-			cant+=a.cantMetodosAbstractos();
-
-		}
-
-		return cant;
+		cant+=a.cantMetodosConcretos();
 
 	}
 
-	public int totalParametros(){
+	return cant;
 
-		int cant = 0;
+}
 
-		for (Clase a : this.clases) {
+public int cantMetodosAbstractos(){
+	int cant = 0;
 
-			cant+=a.totalParametros();
+	for (Clase a : this.clases) {
 
-		}
-
-		return cant;
-
-	}
-
-	public ArrayList<Atributo> obtenerAtributosClase(String nombreClase){
-		Clase clase = this.buscarClase(nombreClase);
-		ArrayList<Atributo> atributos = new ArrayList<Atributo>();
-		if(clase!=null)
-			atributos = clase.ObtenerAtributos();
-		else
-			throw new IllegalArgumentException();
-
-		return atributos;
+		cant+=a.cantMetodosAbstractos();
 
 	}
 
-	public ArrayList<Metodo> obtenerMetodoClase(String nombreClase){
-		Clase clase = this.buscarClase(nombreClase);
-		ArrayList<Metodo> metodos = new ArrayList<Metodo>();
-		if(clase!=null)
-			metodos= clase.ObtenerMetodos();
-		else
-			throw new IllegalArgumentException();
+	return cant;
 
-		return metodos;
+}
 
-	}
+public int totalParametros(){
 
-	public ArrayList<Clase> clasesAbstractas(){
-		ArrayList<Clase> clasesAbstractas = new ArrayList<Clase>();
+	int cant = 0;
 
-		for (Clase a : this.clases) {
-			if(a instanceof Abstracta)
-				clasesAbstractas.add(a);	
+	for (Clase a : this.clases) {
 
-		}
-
-		return clasesAbstractas;
+		cant+=a.totalParametros();
 
 	}
 
-	public ArrayList<Clase> clasesConcretas(){
-		ArrayList<Clase> clasesConcretas = new ArrayList<Clase>();
+	return cant;
 
-		for (Clase a : this.clases) {
-			if(a instanceof Concreta)
-				clasesConcretas.add(a);	
+}
+	 */
 
-		}
-
-		return clasesConcretas;
-
-	}
-
-	public ArrayList<Clase> clasesAsociacion(){
-		ArrayList<Clase> clasesAsociacion = new ArrayList<Clase>();
-
-		for (Clase a : this.clases) {
-			if(a instanceof Asociacion)
-				clasesAsociacion.add(a);	
-
-		}
-
-		return clasesAsociacion;
-
-	}
 
 
 	//Reporte 1
-	public ArrayList<Clase> clasesConMasSuperClases(){
-		ArrayList<Clase> clases = new ArrayList<Clase>();
-		int mayor = -1;
+	/*public ArrayList<Clase> clasesConMasSuperClases(){
+	ArrayList<Clase> clases = new ArrayList<Clase>();
+	int mayor = -1;
 
-		for (Clase a : this.clases) {
-			if(a.cantProgenitores() > mayor){
-				clases.clear();
-				clases.add(a);
-				mayor = a.cantProgenitores();
-
-			}
-			else if (a.cantProgenitores() == mayor){
-				clases.add(a);
-			}
+	for (Clase a : this.clases) {
+		if(a.cantProgenitores() > mayor){
+			clases.clear();
+			clases.add(a);
+			mayor = a.cantProgenitores();
 
 		}
-
-		return clases;
-	}
-	//Reporte 2
-	public ArrayList<Clase> claseMasRelaciones(){
-		ArrayList<Clase> clasesMasRelaciones = new ArrayList<Clase>() ;
-		int cantRelaciones = 0;
-		int mayor = 0;
-
-		for (Clase a : this.clases) {
-			cantRelaciones = a.cantRelaciones();
-			if(cantRelaciones > mayor){
-				clasesMasRelaciones.clear();
-				clasesMasRelaciones.add(a);
-				mayor = cantRelaciones;		
-			}
-			else if (cantRelaciones == mayor){
-				clasesMasRelaciones.add(a);
-			}
+		else if (a.cantProgenitores() == mayor){
+			clases.add(a);
 		}
 
-
-		return clasesMasRelaciones;
 	}
 
-	//Reporte 3
-	public ArrayList<Clase> clasesSoloMetodosAbstractos(){
-		ArrayList<Clase> clases = new ArrayList<Clase>();
+	return clases;
+}
+//Reporte 2
+public ArrayList<Clase> claseMasRelaciones(){
+	ArrayList<Clase> clasesMasRelaciones = new ArrayList<Clase>() ;
+	int cantRelaciones = 0;
+	int mayor = 0;
 
-		for (Clase a : this.clases) {
-			if(a instanceof Abstracta && ((Abstracta) a).soloMetedosAbstractos())
-				clases.add(a);
+	for (Clase a : this.clases) {
+		cantRelaciones = a.cantRelaciones();
+		if(cantRelaciones > mayor){
+			clasesMasRelaciones.clear();
+			clasesMasRelaciones.add(a);
+			mayor = cantRelaciones;		
 		}
-
-		return clases;
-
+		else if (cantRelaciones == mayor){
+			clasesMasRelaciones.add(a);
+		}
 	}
 
-	public void eliminarAtributo(String nombreClase, String nombreAtributo){
-		this.buscarClase(nombreClase).eliminarAtributo(nombreAtributo);
 
+	return clasesMasRelaciones;
+}
+
+//Reporte 3
+public ArrayList<Clase> clasesSoloMetodosAbstractos(){
+	ArrayList<Clase> clases = new ArrayList<Clase>();
+
+	for (Clase a : this.clases) {
+		if(a instanceof Abstracta && ((Abstracta) a).soloMetedosAbstractos())
+			clases.add(a);
 	}
 
-	public void eliminarMetodo(String nombreClase, String nombreMetodo, ArrayList<String> parametros){
-		this.buscarClase(nombreClase).elminarMetodo(nombreMetodo, parametros);
-	}
+	return clases;
+
+}*/
+
+
+	// METODOS PARA LA COMPARACION PARA EL SISTEMA DE GUARDADO
 
 	public boolean equals(Diagrama d){
 		boolean verificador = false;
@@ -484,15 +346,17 @@ public class Diagrama implements  Serializable {
 		return verificador;
 	}
 
-	private boolean equalsClases (Diagrama d){
+	private boolean equalsClases (Diagrama d){ // TEMPORAL
 		boolean verificador = true;
-		ArrayList<Clase> c = d.getClases();
-		if(this.clases.size() == c.size()){
-			for (int i = 0; i < this.clases.size() && verificador; i++) {
-				System.out.println("Entreeeee");
-				if(!this.clases.get(i).equals(c.get(i)))
-					verificador = false;
+		Iterator<Vertex> iterD = d.getGrafoClases().getVerticesList().iterator();
+		Iterator<Vertex> iter = this.grafoClases.getVerticesList().iterator();
 
+		if(this.grafoClases.getVerticesList().size() == d.getGrafoClases().getVerticesList().size()){
+			while (iterD.hasNext() && verificador) {
+				Clase claseAuxD = (Clase) iterD.next().getInfo();
+				Clase claseAux = (Clase) iter.next().getInfo();
+				if(!claseAuxD.equals(claseAux)) // utilizamos el metodo equals de implementacion propia para comparar dos referencias distintas del objeto clase
+					verificador = false;
 			}
 		}
 		else
@@ -500,6 +364,8 @@ public class Diagrama implements  Serializable {
 
 		return verificador;
 	}
+
+	// FIN DE METODOS PARA LA COMPARACION PARA EL SISTEMA DE GUARDADO
 
 	public void eliminarRelaciones(String nombre){
 		int i = 0;
