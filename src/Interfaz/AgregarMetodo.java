@@ -467,8 +467,8 @@ public class AgregarMetodo extends JFrame {
 		if (rdbtnAbstracto.isSelected())
 			isAbstracto = true;
 
-		clase.addMetodo(new Metodo(textFieldNombre.getText(), obtenerAcceso(), isAbstracto,
-				textFieldTipoDato.getText(), obtenerParametrosTabla()));
+		GestorUML.getInstancie().getDiagramaSeleccionado().addMetodoClase(clase, new Metodo(textFieldNombre.getText(), obtenerAcceso(), isAbstracto,
+				textFieldTipoDato.getText(), obtenerParametrosTabla())); // Se añade el metodo a la clase
 	}
 
 

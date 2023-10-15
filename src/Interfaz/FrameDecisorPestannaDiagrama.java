@@ -18,23 +18,24 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import util.LabelArchivoGuardado;
+import util.PanelPenstannaDiagrama;
+import Clases.GestorUML;
 import Logica.ManejoDirectorios;
 
-public class FrameDecisor extends JFrame {
+public class FrameDecisorPestannaDiagrama extends JFrame {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JLabel lblSalir;
+	private JLabel lblGuardar;
 	private JLabel lblTexto;
-	private JPanel panelSalir;
+	private JPanel panelGuardar;
 	private JPanel panelCancelar;
-	private JFrame pe;
-	private LabelArchivoGuardado la;
+	private PanelPenstannaDiagrama panelPestannaDiagrama;
 	private String nombreDiagrama;
-	private JLabel lblnull;
+	private JLabel lblNombreDiagrama;
 
 
 	/**
@@ -42,14 +43,9 @@ public class FrameDecisor extends JFrame {
 	 */
 
 
-	public FrameDecisor(JFrame p, LabelArchivoGuardado l) {
-		pe = p;
-		la = l;
-		
-		if(pe instanceof Principal)
-			nombreDiagrama = ((Principal) pe).getDiagrama().getNombre();
-		else if(pe instanceof DiagramasAbrir)
-			nombreDiagrama = ((DiagramasAbrir) pe).getPe().getDiagrama().getNombre();
+	public FrameDecisorPestannaDiagrama(PanelPenstannaDiagrama p) {
+		panelPestannaDiagrama = p;
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, 0, 509, 224);
 		setUndecorated(true);
@@ -60,65 +56,48 @@ public class FrameDecisor extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		lblTexto = new JLabel("Desea guardar los cambios efectuados en");
+		lblTexto = new JLabel("Desea guardar los cambios efectuados en:");
 		lblTexto.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTexto.setFont(new Font("Dialog", Font.BOLD, 19));
 		lblTexto.setBounds(10, 41, 489, 46);
 		contentPane.add(lblTexto);
 
-		panelSalir = new JPanel();
-		panelSalir.addMouseListener(new MouseAdapter() {
+		panelGuardar = new JPanel();
+		panelGuardar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				panelSalir.setBackground(new Color(104,137,148));
+				panelGuardar.setBackground(new Color(104,137,148));
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-				panelSalir.setBackground(SystemColor.inactiveCaptionBorder);
+				panelGuardar.setBackground(SystemColor.inactiveCaptionBorder);
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {
-				if(pe instanceof Principal){
-					try {
-						ManejoDirectorios.guardarArchivo(((Principal) pe).getDiagrama());
-					} catch (FileNotFoundException e1) {
+				try {
+					ManejoDirectorios.guardarArchivo(GestorUML.getInstancie().getDiagramaSeleccionado()); // Se guarda la informacion de ese diagrama antes de cerrarlo
+				} catch (FileNotFoundException e1) {
 
-						e1.printStackTrace();
-					} catch (IOException e1) {
+					e1.printStackTrace();
+				} catch (IOException e1) {
 
-						e1.printStackTrace();
-					}
-					
-					System.exit(0);
+					e1.printStackTrace();
 				}
-				else{
-					try {
-						ManejoDirectorios.guardarArchivo(((DiagramasAbrir) pe).getPe().getDiagrama());
-					} catch (FileNotFoundException e1) {
-						
-						e1.printStackTrace();
-					} catch (IOException e1) {
-						
-						e1.printStackTrace();
-					}
-					
-					la.cargarArchivo();
-				}
-
-				
+				panelPestannaDiagrama.cerrarDiagrama(); // se cierra la pestaña del diagrama
+				Principal.getInstancie().setEnabled(true);
 				dispose();
 			}
 		});
-		panelSalir.setBounds(20, 135, 138, 55);
-		panelSalir.setBackground(SystemColor.inactiveCaptionBorder);
-		contentPane.add(panelSalir);
-		panelSalir.setLayout(null);
+		panelGuardar.setBounds(20, 135, 138, 55);
+		panelGuardar.setBackground(SystemColor.inactiveCaptionBorder);
+		contentPane.add(panelGuardar);
+		panelGuardar.setLayout(null);
 
-		lblSalir = new JLabel("Guardar");
-		lblSalir.setHorizontalAlignment(SwingConstants.CENTER);
-		lblSalir.setBounds(18, 7, 113, 40);
-		panelSalir.add(lblSalir);
-		lblSalir.setFont(new Font("Dialog", Font.BOLD, 19));
+		lblGuardar = new JLabel("Guardar");
+		lblGuardar.setHorizontalAlignment(SwingConstants.CENTER);
+		lblGuardar.setBounds(18, 7, 113, 40);
+		panelGuardar.add(lblGuardar);
+		lblGuardar.setFont(new Font("Dialog", Font.BOLD, 19));
 
 
 		panelCancelar = new JPanel();
@@ -133,8 +112,8 @@ public class FrameDecisor extends JFrame {
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {
-               pe.setEnabled(true);
-               dispose();
+				Principal.getInstancie().setEnabled(true);
+				dispose();
 			}
 		});
 		panelCancelar.setBounds(361, 135, 138, 55);
@@ -157,14 +136,11 @@ public class FrameDecisor extends JFrame {
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {
-				if(pe instanceof Principal)
-					System.exit(0);
-				else if(pe instanceof DiagramasAbrir){
-					la.cargarArchivo();
-				}
-				
+
+				panelPestannaDiagrama.cerrarDiagrama(); // se cierra la pestaña del diagrama
+				Principal.getInstancie().setEnabled(true);
 				dispose();
-				
+
 			}
 		});
 		panelNoGuardar.setLayout(null);
@@ -177,12 +153,12 @@ public class FrameDecisor extends JFrame {
 		lblNoGuardar.setFont(new Font("Dialog", Font.BOLD, 19));
 		lblNoGuardar.setBounds(10, 11, 113, 33);
 		panelNoGuardar.add(lblNoGuardar);
-		
-		lblnull = new JLabel("          \""+ nombreDiagrama +"\"");
-		lblnull.setHorizontalAlignment(SwingConstants.LEFT);
-		lblnull.setFont(new Font("Dialog", Font.BOLD, 19));
-		lblnull.setBounds(10, 78, 489, 46);
-		contentPane.add(lblnull);
+
+		lblNombreDiagrama = new JLabel(GestorUML.getInstancie().getDiagramaSeleccionado().getNombre());
+		lblNombreDiagrama.setHorizontalAlignment(SwingConstants.LEFT);
+		lblNombreDiagrama.setFont(new Font("Dialog", Font.BOLD, 19));
+		lblNombreDiagrama.setBounds(10, 78, 489, 46);
+		contentPane.add(lblNombreDiagrama);
 
 	}
 

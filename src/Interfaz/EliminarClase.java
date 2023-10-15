@@ -7,6 +7,7 @@ import javax.swing.border.*;
 
 import Clases.Clase;
 import Clases.Diagrama;
+import Clases.GestorUML;
 import util.PanelClase;
 
 import java.awt.event.*;
@@ -57,8 +58,10 @@ public class EliminarClase extends JFrame {
 		panelConfirmar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				Diagrama.getInstance().eliminarClase(clase);
+				GestorUML.getInstancie().getDiagramaSeleccionado().eliminarClase(clase);
 				// Actualizar Lienzo con la logica del diagrama
+				Principal.getInstancie().actualizarLienzo();
+				Principal.getInstancie().setEnabled(true);
 				dispose();
 			}
 			@Override

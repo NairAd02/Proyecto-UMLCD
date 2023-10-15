@@ -1,40 +1,31 @@
 package Logica;
 
 import java.io.File;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import Clases.Diagrama;
 
 public class ManejoDirectorios {
 
 	public static void guardarArchivo(Object objeto) throws FileNotFoundException, IOException{
-		ObjectMapper mapper = new ObjectMapper();
-		String stringJson = mapper.writeValueAsString(objeto);
-		
-		System.out.println(stringJson);
-		
-		FileWriter writer = new FileWriter("Salvas Diagrama/"+ ((Diagrama) objeto).getNombre()+ ".json");
-		writer.write(stringJson);
-		writer.flush();
-		writer.close();
+		ObjectOutputStream stream = new ObjectOutputStream(new FileOutputStream("Salvas Diagrama/" + ((Diagrama) objeto).getNombre()));
+		stream.writeObject(objeto);
+		stream.close();
 		
 		
 	}
 
 	public static Object recuperarArchivo(String ruta) throws FileNotFoundException, IOException, ClassNotFoundException{
 		Object objetoArecuperar = null;
-		ObjectMapper mapper = new ObjectMapper();
 		
-		objetoArecuperar = mapper.readValue(new File("Salvas Diagrama/" + ruta ), Diagrama.class);
-		 System.out.println(((Diagrama) objetoArecuperar).getNombre());
+		ObjectInputStream stream = new ObjectInputStream(new FileInputStream("Salvas Diagrama/" + ruta));
+		objetoArecuperar = stream.readObject();
+		stream.close();
 
 		return objetoArecuperar;
 	}
@@ -62,7 +53,7 @@ public class ManejoDirectorios {
 			
 			Diagrama d;
 			try {
-				d = (Diagrama) ManejoDirectorios.recuperarArchivo(diagramaActual.getNombre()+".json");
+				d = (Diagrama) ManejoDirectorios.recuperarArchivo(diagramaActual.getNombre());
 				if(d.equals(diagramaActual))
 					isGuardado = true;
 			} catch (FileNotFoundException e) {

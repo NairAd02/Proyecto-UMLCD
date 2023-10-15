@@ -13,6 +13,15 @@ import java.awt.Font;
 import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import javax.swing.BoxLayout;
+import java.awt.Component;
+import java.awt.FlowLayout;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import java.awt.CardLayout;
 
 public class PanelInicio extends JPanel {
 	/**
@@ -20,8 +29,10 @@ public class PanelInicio extends JPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 	private Principal pe;
+	private JLabel lblNewLabel;
 
 	public PanelInicio(Principal p) {
+		setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -34,34 +45,31 @@ public class PanelInicio extends JPanel {
 		pe = p;
 		setBorder(null);
 		setBackground(SystemColor.textHighlightText);
-		setLayout(null);
+				actualizarPosiscionImagenUML();
 
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				pe.getPanelHerramDesp().setVisible(false);
-				pe.setDesplegadoHerram(false);
-				pe.getPanelArchivoDesp().setVisible(false);
-				pe.setDesplegadoArchivo(false);
-				FrameNuevoDiagrama nuevoDiagrama = new FrameNuevoDiagrama(pe);
-				nuevoDiagrama.setVisible(true);
-				pe.setEnabled(false);
-			}
-		});
+lblNewLabel = new JLabel("");
+
+lblNewLabel.addMouseListener(new MouseAdapter() {
+	@Override
+	public void mousePressed(MouseEvent e) {
+		pe.getPanelHerramDesp().setVisible(false);
+		pe.setDesplegadoHerram(false);
+		pe.getPanelArchivoDesp().setVisible(false);
+		pe.setDesplegadoArchivo(false);
+		FrameNuevoDiagrama nuevoDiagrama = new FrameNuevoDiagrama(pe);
+		nuevoDiagrama.setVisible(true);
+		pe.setEnabled(false);
+	}
+});
+setLayout(new BorderLayout(0, 0));
+lblNewLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+lblNewLabel.setBorder(null);
+lblNewLabel.setIcon(new ImageIcon(PanelInicio.class.getResource("/images/UMLSCREEN.png")));
+add(lblNewLabel);
+	}
+	
+	public void actualizarPosiscionImagenUML(){
 		
-				JLabel lblCrearNuevoDiagrama = new JLabel("Crear nuevo diagrama");
-				lblCrearNuevoDiagrama.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-				lblCrearNuevoDiagrama.setHorizontalAlignment(SwingConstants.CENTER);
-				lblCrearNuevoDiagrama.setFont(new Font("Dialog", Font.BOLD, 18));
-				lblCrearNuevoDiagrama.setBounds(264, 324, 295, 25);
-				add(lblCrearNuevoDiagrama);
-		lblNewLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setBorder(null);
-		lblNewLabel.setIcon(new ImageIcon(PanelInicio.class.getResource("/images/500x500.png")));
-		lblNewLabel.setBounds(213, 125, 423, 224);
-		add(lblNewLabel);
-
 	}
 }

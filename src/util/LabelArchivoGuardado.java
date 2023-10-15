@@ -2,24 +2,23 @@ package util;
 
 import javax.swing.JLabel;
 
+
+
+
+
 import java.awt.Color;
 import java.awt.Font;
-
 import javax.swing.SwingConstants;
-
-import Clases.Clase;
 import Clases.Diagrama;
+import Clases.GestorUML;
 import Interfaz.DiagramasAbrir;
-import Interfaz.FrameDecisor;
-import Interfaz.Lienzo;
 import Interfaz.Principal;
 import Logica.ManejoDirectorios;
-
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
+
 
 public class LabelArchivoGuardado extends JLabel{
 
@@ -29,8 +28,8 @@ public class LabelArchivoGuardado extends JLabel{
 	private static final long serialVersionUID = 1L;
 	private Principal pe;
 	private DiagramasAbrir di;
-	
-	
+
+
 	public Principal getPe() {
 		return pe;
 	}
@@ -54,14 +53,10 @@ public class LabelArchivoGuardado extends JLabel{
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {
-				if(ManejoDirectorios.comprobarEstadoDeGuardado(pe.getDiagrama())){
-					cargarArchivo();
-				}
-				else{
-					FrameDecisor decisor = new FrameDecisor(di, LabelArchivoGuardado.this);
-					decisor.setVisible(true);
-					di.setEnabled(false);
-				}
+
+				cargarArchivo(); 
+
+
 			}
 		});
 		setHorizontalAlignment(SwingConstants.LEFT);
@@ -76,10 +71,21 @@ public class LabelArchivoGuardado extends JLabel{
 		Diagrama diagrama = null;
 		try {
 			diagrama = (Diagrama) ManejoDirectorios.recuperarArchivo(getText());
-			Diagrama.setInstance(diagrama);
-			pe.setDiagrama(diagrama);
-			Principal.getInstancie().actualizarLienzo();
+
+			if (!GestorUML.getInstancie().comprobarExistenciaDiagrama(diagrama)) { // Si no esta dentro de los diagramas previamente cargados
+				diagrama.setEstadoModificacion(false); // se indica que su estado de modificacion es false en caso de que sea true
+				GestorUML.getInstancie().addDiagrama(diagrama); // se carga en memoria
+			}
+			else // se esta dentro de los diagramas previamente cargadoes
+				GestorUML.getInstancie().setDiagramaSeleccionado(diagrama); // se actualiza como diagrama cargado
 			
+			pe.actualizarPanelPestannaDiagramas(); // se actualiza la pestaña de diagramas
+			pe.setDiagrama(diagrama);
+			crearLienzo();
+			Principal.getInstancie().actualizarLienzo();
+			Principal.getInstancie().setEnabled(true);
+			di.dispose();
+
 
 		} catch (FileNotFoundException e1) {
 
@@ -92,7 +98,11 @@ public class LabelArchivoGuardado extends JLabel{
 			e1.printStackTrace();
 		}
 	}
-	
 
+	public void crearLienzo(){
+		pe.habilitarPrograma();
+		pe.repaint();
+		pe.revalidate();
+	}
 
 }

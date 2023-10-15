@@ -25,6 +25,7 @@ import mensajesError.ClasesMismoName;
 import util.JTextFieldMejorado;
 import util.LabelArchivoGuardado;
 import Clases.Diagrama;
+import Clases.GestorUML;
 import Logica.ManejoDirectorios;
 import Logica.Operaciones;
 
@@ -38,7 +39,7 @@ public class FrameNuevoDiagrama extends JFrame {
 	private Principal pe;
 	private JLabel labelNombre;
 	private JTextFieldMejorado textFieldNombreDiagrama;
-    
+
 	private ButtonGroup bg;
 	private JPanel panelConfirmar;
 	private JLabel labelConfirmar;
@@ -52,7 +53,7 @@ public class FrameNuevoDiagrama extends JFrame {
 	 */
 	public FrameNuevoDiagrama(Principal p) {
 		pe = p;
-		
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 428, 232);
 		setUndecorated(true);
@@ -63,33 +64,33 @@ public class FrameNuevoDiagrama extends JFrame {
 		contentPane.setBorder(new LineBorder(new Color(0, 0, 0)));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		labelNombre = new JLabel("Ingrese el nombre del nuevo diagrama");
 		labelNombre.setFont(new Font("Dialog", Font.BOLD, 16));
 		labelNombre.setBounds(28, 31, 318, 38);
 		contentPane.add(labelNombre);
-		
+
 		textFieldNombreDiagrama = new JTextFieldMejorado();
 		textFieldNombreDiagrama.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
 				if(textFieldNombreDiagrama.getSelectedText()==null)	
-				textFieldNombreDiagrama.setText(textFieldNombreDiagrama.getText().trim());
-				
+					textFieldNombreDiagrama.setText(textFieldNombreDiagrama.getText().trim());
+
 			}
 		});
 		textFieldNombreDiagrama.setLimite(40);
 		textFieldNombreDiagrama.setBounds(28, 75, 360, 34);
 		contentPane.add(textFieldNombreDiagrama);
-		
+
 		bg = new ButtonGroup();
-		
+
 		panelConfirmar = new JPanel();
 		panelConfirmar.setLayout(null);
 		panelConfirmar.setBackground(SystemColor.inactiveCaptionBorder);
 		panelConfirmar.setBounds(28, 167, 109, 38);
 		panelConfirmar.addMouseListener(new MouseAdapter() {
-		
+
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
 				panelConfirmar.setBackground(new Color(104,137,148));
@@ -116,16 +117,16 @@ public class FrameNuevoDiagrama extends JFrame {
 				}
 			}
 		});
-		
-		
+
+
 		contentPane.add(panelConfirmar);
-		
+
 		labelConfirmar = new JLabel("    Confirmar");
-		
+
 		labelConfirmar.setBounds(0, 0, 109, 38);
 		panelConfirmar.add(labelConfirmar);
 		labelConfirmar.setFont(new Font("Dialog", Font.BOLD, 16));
-		
+
 		panelCancelar = new JPanel();
 		panelCancelar.setLayout(null);
 		panelCancelar.setBackground(SystemColor.inactiveCaptionBorder);
@@ -147,50 +148,40 @@ public class FrameNuevoDiagrama extends JFrame {
 			}
 		});
 		contentPane.add(panelCancelar);
-		
+
 		labelCancelar = new JLabel("     Cancelar");
 		labelCancelar.setFont(new Font("Dialog", Font.BOLD, 16));
 		labelCancelar.setBounds(0, 0, 109, 38);
 		panelCancelar.add(labelCancelar);
-		
+
 		lblErrorTexto = new JLabel("Es necesario un nombre");
 		lblErrorTexto.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblErrorTexto.setForeground(Color.RED);
 		lblErrorTexto.setVisible(false);
 		lblErrorTexto.setBounds(28, 120, 139, 23);
 		contentPane.add(lblErrorTexto);
-		
+
 		lblDiagramaSameNameError = new JLabel("Ya existe un diagrama con el mismo nombre");
 		lblDiagramaSameNameError.setVisible(false);
 		lblDiagramaSameNameError.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblDiagramaSameNameError.setForeground(Color.RED);
 		lblDiagramaSameNameError.setBounds(28, 21, 390, 14);
 		contentPane.add(lblDiagramaSameNameError);
-		
-		
-		
+
+
+
 	}
-	
-	public void actualizarLienzo(){
-		pe.setLienzo(new Lienzo());	
-		pe.getScrollPane().setViewportView(pe.getLienzo());
-		pe.actualizarAccionesLienzo();
-		pe.getLienzo().repaint();
-		pe.getLienzo().revalidate();
-		pe.repaint();
-		pe.revalidate();
-	}
-	
-	
-	
+
+
+
+
 	public void crearNuevoDiagrama(){
-		
-		Diagrama.setInstance(null);
-		pe.setDiagrama(Diagrama.getInstance(textFieldNombreDiagrama.getText()));
-		actualizarLienzo();
+
+		GestorUML.getInstancie().addDiagrama(new Diagrama(textFieldNombreDiagrama.getText()));
+		pe.actualizarPanelPestannaDiagramas(); // se actualiza la pestaña de diagramas
 		pe.habilitarPrograma();
 		pe.setEnabled(true);
 		dispose();
 	}
-	
+
 }

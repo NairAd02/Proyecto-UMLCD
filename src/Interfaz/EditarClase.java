@@ -1,18 +1,16 @@
 package Interfaz;
 
 import java.awt.*;
-
 import java.awt.event.*;
 
-
 import javax.swing.*;
-
 
 import util.PanelClase;
 
 import javax.swing.border.LineBorder;
 
 import Clases.Clase;
+import Clases.GestorUML;
 
 
 public class EditarClase extends JFrame {
@@ -175,29 +173,21 @@ public class EditarClase extends JFrame {
 	}
 
 	private void cambiarColorClase(){
+		String color = "";
 
-		if(rdbtnColorAmarillo.isSelected()){
-			pe.setBackground(SystemColor.info);
-			pe.getPanelAtributos().setBackground(SystemColor.info);
-			pe.getPanelMetodos().setBackground(SystemColor.info);
-			clase.setColor("Amarillo");
 
-		}
-		else if(rdbtnColorAzul.isSelected()){
-			pe.setBackground(SystemColor.activeCaption);
-			pe.getPanelAtributos().setBackground(SystemColor.activeCaption);
-			pe.getPanelMetodos().setBackground(SystemColor.activeCaption);
-			clase.setColor("Azul");
+		if(rdbtnColorAmarillo.isSelected())
+			color = "Amarillo";
 
-		}
-		else if(rdbtnGris.isSelected()){
-			pe.setBackground(SystemColor.control);
-			pe.getPanelAtributos().setBackground(SystemColor.control);
-			pe.getPanelMetodos().setBackground(SystemColor.control);
-			clase.setColor("Gris");
-		}
 
-		pe.repaint();
-		pe.revalidate();
+		else if(rdbtnColorAzul.isSelected())
+			color = "Azul";
+
+		else if(rdbtnGris.isSelected())
+			color = "Gris";
+
+
+		GestorUML.getInstancie().getDiagramaSeleccionado().modificarColorClase(clase, color); // se modifica el color de la clase
+		pe.actualizarColorClase(); // se actualiza el color de la clase del lienzo
 	}
 }

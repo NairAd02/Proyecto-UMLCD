@@ -1,5 +1,8 @@
 package Interfaz;
 
+import grafo.LinkedGraph;
+import grafo.Vertex;
+
 import javax.swing.*;
 
 import Clases.*;
@@ -13,13 +16,12 @@ import java.util.Iterator;
 
 import javax.swing.border.LineBorder;
 
-import cu.edu.cujae.ceis.graph.interfaces.ILinkedWeightedEdgeDirectedGraph;
-import cu.edu.cujae.ceis.graph.vertex.Vertex;
 import mensajesError.AlmenosDos;
 import mensajesError.AlmenosUna;
 import mensajesError.ClasesMismoName;
 import util.MenuContextualLienzo;
 import util.PanelClase;
+import util.PanelPenstannaDiagrama;
 
 
 public class Principal extends JFrame {
@@ -37,7 +39,6 @@ public class Principal extends JFrame {
 	private Lienzo lienzo;
 	private Diagrama diagrama;
 	private PanelClase panelClase;
-	private JScrollPane scrollPane;
 	private PantallaCompleta pant;
 	private PanelInicio panelInicio;
 	private boolean isHerenciaClase1;
@@ -70,6 +71,9 @@ public class Principal extends JFrame {
 	private JSeparator separator_10;
 	private MenuContextualLienzo menuLienzo;
 	private static  Principal principal;
+	private JPanel panelPestannaDiagramas;
+	private JScrollPane scrollPane;
+	private JPanel panelDiagramas;
 
 
 
@@ -239,63 +243,10 @@ public class Principal extends JFrame {
 	 */
 	private Principal() {
 
-		pant = new PantallaCompleta(Principal.this);
-		pant.setVisible(false);
-		panelInicio = new PanelInicio(Principal.this);
-		panelInicio.setVisible(true);
-
-		isInsertar=false;
-		isEliminar=false;
-		isHerencia=false;
-		isHerenciaClase1=false;
-		isHerenciaClase2=false;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, 0, 1100, 700);
 		setLocationRelativeTo(null);
 		setUndecorated(true);
-
-
-		scrollPane = new JScrollPane();
-		scrollPane.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {
-
-
-			@Override
-			public void adjustmentValueChanged(AdjustmentEvent arg0) {
-				panelHerramDesp.setVisible(false);
-				desplegadoHerram = false;
-				panelArchivoDesp.setVisible(false);
-				desplegadoArchivo = false;
-				panelContenedor.repaint();
-				panelContenedor.revalidate();
-
-			}
-		});
-
-		scrollPane.getHorizontalScrollBar().addAdjustmentListener(new AdjustmentListener() {
-
-			@Override
-			public void adjustmentValueChanged(AdjustmentEvent arg0) {
-				panelHerramDesp.setVisible(false);
-				desplegadoHerram = false;
-				panelArchivoDesp.setVisible(false);
-				desplegadoArchivo = false;
-				panelContenedor.repaint();
-				panelContenedor.revalidate();
-
-			}
-		});
-
-
-
-		scrollPane.addMouseWheelListener(new MouseWheelListener() {
-			public void mouseWheelMoved(MouseWheelEvent arg0) {
-				contentPane.repaint();
-				contentPane.revalidate();
-
-
-			}
-		});
-		scrollPane.setBounds(226, 100, 874, 600);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.LIGHT_GRAY);
 		contentPane.setBorder(null);
@@ -378,6 +329,8 @@ public class Principal extends JFrame {
 				DiagramasAbrir abrir = new DiagramasAbrir(Principal.this);
 				abrir.setVisible(true);
 				setEnabled(false);
+				panelArchivoDesp.setVisible(false);
+				desplegadoArchivo = false;
 			}
 		});
 		panelArchivoDesp.add(panelAbrir);
@@ -403,9 +356,8 @@ public class Principal extends JFrame {
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {
+				panelArchivoDesp.setVisible(false);
 				if(diagrama != null){
-
-
 					try {
 						guardarDiagrama();
 					} catch (FileNotFoundException e1) {
@@ -503,9 +455,8 @@ public class Principal extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				panelHerramDesp.setVisible(false);
-				pant = new PantallaCompleta(Principal.this);
+				pant = new PantallaCompleta(panelDiagramas);
 				pant.setVisible(true);
-				pant.getContentPane().add(scrollPane,BorderLayout.CENTER);
 				setVisible(false);
 				setEnabled(false);
 				repaint();
@@ -882,16 +833,11 @@ public class Principal extends JFrame {
 				desplegadoHerram = false;
 				panelArchivoDesp.setVisible(false);
 				desplegadoArchivo = false;
-				if(ManejoDirectorios.comprobarEstadoDeGuardado(diagrama)){	
-					ConfirmarSalida frame = new ConfirmarSalida(Principal.this);
-					frame.setVisible(true);
-					setEnabled(false);
-				}
-				else{
-					FrameDecisor decisor = new FrameDecisor(Principal.this, null);
-					decisor.setVisible(true);
-					setEnabled(false);
-				}
+
+				ConfirmarSalida frame = new ConfirmarSalida(Principal.this);
+				frame.setVisible(true);
+				setEnabled(false);
+
 			}
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -1191,17 +1137,28 @@ public class Principal extends JFrame {
 		separator_5.setBounds(0, 0, 2000, 1);
 		panelContenedor.add(separator_5);
 
+		panelDiagramas = new JPanel();
+		panelDiagramas.setBackground(SystemColor.inactiveCaptionBorder);
+		panelDiagramas.setBounds(226, 101, 874, 599);
+		panelContenedor.add(panelDiagramas);
+		panelDiagramas.setLayout(new BorderLayout(0, 0));
 
-		scrollPane.setViewportView(panelInicio);
-		panelContenedor.add(scrollPane);
+		scrollPane = new JScrollPane();
+		panelDiagramas.add(scrollPane, BorderLayout.CENTER);
 
+		panelPestannaDiagramas = new JPanel();
+		FlowLayout flowLayout = (FlowLayout) panelPestannaDiagramas.getLayout();
+		flowLayout.setAlignment(FlowLayout.LEFT);
+		panelPestannaDiagramas.setBackground(Color.WHITE);
+		panelDiagramas.add(panelPestannaDiagramas, BorderLayout.NORTH);
 
-
+		actualizarPanelPestannaDiagramas();
+		habilitarPrograma();
 
 	}
 
 	public void repintarClase(PanelClase p){
-		p.setSize(p.getPreferredSize().width+50,p.getPreferredSize().height+50);
+		p.setSize(p.getPreferredSize().width+50, p.getPreferredSize().height+50);
 		p.setMidPoint();
 		//lienzo.repaint();
 		//lienzo.revalidate();
@@ -1386,21 +1343,22 @@ public class Principal extends JFrame {
 
 	public void addClase (int posiscionX, int posicionY) throws Exception {
 		if (radioBotonTipoClase.equalsIgnoreCase("Concreta")){ // Creamos Clase Concreta
-			Diagrama.getInstance().addClase(new Concreta(nombreClase, posiscionX, posicionY, 100, 100));
+			GestorUML.getInstancie().getDiagramaSeleccionado().addClase(new Concreta(nombreClase, posiscionX, posicionY, 100, 100));
 		}
 		else if (radioBotonTipoClase.equalsIgnoreCase("Abstracta")){ // Creamos Clase Abstracta
-			Diagrama.getInstance().addClase(new Abstracta(nombreClase, posiscionX, posicionY, 100, 100));	
+			GestorUML.getInstancie().getDiagramaSeleccionado().addClase(new Abstracta(nombreClase, posiscionX, posicionY, 100, 100));	
 		}
 	}
 
 	public void actualizarLienzo () {
-		ILinkedWeightedEdgeDirectedGraph clases = (ILinkedWeightedEdgeDirectedGraph) Diagrama.getInstance().getGrafoClases();
+		LinkedGraph clases =  GestorUML.getInstancie().getDiagramaSeleccionado().getGrafoClases();
 
 		// Temporalmente se muestran solo las clases sin sus relaciones
 
-		Iterator<Vertex> iter = clases.getVerticesList().iterator();
+		Iterator<Vertex> iter = clases.getVertices().iterator();
 		lienzo.removeAll(); // se remueven todas la clases para volver a insertarlas
 		while (iter.hasNext()) {
+
 			Clase claseAux = (Clase) iter.next().getInfo();
 			lienzo.add(new PanelClase(principal, claseAux)); // se crea un panel para guardar la informacion de la clase y se añade en el lienzo
 		}
@@ -1408,33 +1366,91 @@ public class Principal extends JFrame {
 		lienzo.revalidate();
 	}
 
-	public void actualizarAccionesLienzo(){
-		accionesLienzo();
-
-		for (int i = 0; i < lienzo.getComponentCount(); i++) {
-			if(lienzo.getComponent(i) instanceof PanelClase){
-				((PanelClase)lienzo.getComponent(i)).accionesPanelClase();
-				((PanelClase)lienzo.getComponent(i)).setPe(Principal.this);
-			}
-
+	public void actualizarPanelPestannaDiagramas () { // Metodo para actualizar las pestañas diagrama
+		Iterator<Diagrama> diagramasIter = GestorUML.getInstancie().getDiagramas().iterator();
+		panelPestannaDiagramas.removeAll();
+		while (diagramasIter.hasNext()) {
+			this.panelPestannaDiagramas.add(new PanelPenstannaDiagrama(diagramasIter.next())); // se muestran en el panel todos los diagramas abiertos
 		}
+		panelPestannaDiagramas.repaint();
+		panelPestannaDiagramas.revalidate();
+	}
 
+	public void actualizarColorPanelPestannaDiagrama (Diagrama diagramaAnterior) { // Metodo para actualizar el color de la pestaña antes seleccionadad
+		boolean parada = false;
+		// iniciamos una busqueda
+
+		for (int i = 0; i < this.panelPestannaDiagramas.getComponentCount() &&  !parada; i++) {
+			PanelPenstannaDiagrama panelAux = (PanelPenstannaDiagrama) this.panelPestannaDiagramas.getComponent(i);
+			if (panelAux.getDiagrama().equals(diagramaAnterior)) {
+				panelAux.colorPanel(); // se establece el color
+				parada = true; // se le pone fin al bucle
+
+			}		
+		}
+		repaint();
+		revalidate();
+	}
+
+	public void crearLienzo(){
+		lienzo = new Lienzo();
+		scrollPane.setViewportView(lienzo); // se añade al scrollpane
+		panelDiagramas.remove(panelInicio); // se elimina el panelInicio
+		panelDiagramas.add(scrollPane, BorderLayout.CENTER);
+		accionesLienzo();
+		actualizarLienzo();
+
+
+
+	}
+
+	public void crearPanelInicio () {
+		panelInicio = new PanelInicio(Principal.this);
+		panelDiagramas.remove(scrollPane); // se elimina el scrollPane
+		panelDiagramas.add(panelInicio, BorderLayout.CENTER);	
+		panelInicio.actualizarPosiscionImagenUML(); // se actualiza la posiscion de la imagen 
 	}
 
 	public void habilitarPrograma(){
-		lblAddClaseImg.setEnabled(true);
-		lblAddClase.setEnabled(true);
-		lblAddRelacion.setEnabled(true);
-		lblAddRelacionImg.setEnabled(true);
-		lblEditarClaseImg.setEnabled(true);
-		lblEditarClase.setEnabled(true);
-		lblEliminarClaseImg.setEnabled(true);
-		lblEliminarClase.setEnabled(true);
-		lblHerramientas.setEnabled(true);
-		lblHerramientasImg.setEnabled(true);
+		if (GestorUML.getInstancie().getDiagramaSeleccionado() != null){ // Se cargó al menos un diagrama
+			crearLienzo();
+			lblAddClaseImg.setEnabled(true);
+			lblAddClase.setEnabled(true);
+			lblAddRelacion.setEnabled(true);
+			lblAddRelacionImg.setEnabled(true);
+			lblEditarClaseImg.setEnabled(true);
+			lblEditarClase.setEnabled(true);
+			lblEliminarClaseImg.setEnabled(true);
+			lblEliminarClase.setEnabled(true);
+			lblHerramientas.setEnabled(true);
+			lblHerramientasImg.setEnabled(true);
+
+		}
+		else {
+			crearPanelInicio();
+			isInsertar=false;
+			isEliminar=false;
+			isHerencia=false;
+			isHerenciaClase1=false;
+			isHerenciaClase2=false;
+			lblAddClaseImg.setEnabled(false);
+			lblAddClase.setEnabled(false);
+			lblAddRelacion.setEnabled(false);
+			lblAddRelacionImg.setEnabled(false);
+			lblEditarClaseImg.setEnabled(false);
+			lblEditarClase.setEnabled(false);
+			lblEliminarClaseImg.setEnabled(false);
+			lblEliminarClase.setEnabled(false);
+			lblHerramientas.setEnabled(false);
+			lblHerramientasImg.setEnabled(false);
+		}
+
+		repaint();
+		revalidate();
+
 	}
 
 	public void guardarDiagrama() throws FileNotFoundException, IOException{
-		ManejoDirectorios.guardarArchivo(diagrama);
+		ManejoDirectorios.guardarArchivo(GestorUML.getInstancie().getDiagramaSeleccionado()); // se guarda el diagrama seleccionado
 	}
 }

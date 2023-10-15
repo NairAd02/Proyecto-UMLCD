@@ -150,15 +150,11 @@ public class PanelClase extends JPanel {
 		actualizarAtributos();
 		actualizarMetodos();
 		accionesPanelClase();
-		definirDimensiones();
+		actualizarDimensionesClase();
+		actualizarColorClase();
 
 	}
 
-	public void definirDimensiones () {
-
-		setLocation(clase.getPosicionX(), clase.getPosicionY());
-		setSize(clase.getDimensionX(), clase.getDimensionY());
-	}
 
 	public void actualizarAtributos (){ // Metodo para actualizar la infomacion de los atributos de una clase
 		List<Atributo> atributos = clase.getAtributos();
@@ -194,11 +190,45 @@ public class PanelClase extends JPanel {
 	}
 
 	public void actualizarDimensionesClase () { // Metodo para actualizar las posiciones de la clase
+		setLocation(clase.getPosicionX(), clase.getPosicionY());
 		clase.setDimensionX(getPreferredSize().width + 50);
 		clase.setDimensionY(getPreferredSize().height + 50);
 		setSize(clase.getDimensionX(), clase.getDimensionY());
 		repaint();
 		revalidate();
+	}
+
+	public void actualizarColorClase () { // Metodo para actualizar el color de la clase
+
+		if (clase.getColor().equalsIgnoreCase("Amarillo"))
+			pintarAmarrillo();
+		else if (clase.getColor().equalsIgnoreCase("Gris"))
+			pintarGris();
+		else if (clase.getColor().equalsIgnoreCase("Azul"))
+			pintarAzul();
+
+		repaint();
+		revalidate();
+
+	}
+
+	// Metodos para pintar el relieve de la clase de un color
+	private void pintarAmarrillo () {
+		setBackground(SystemColor.info);
+		panelAtributos.setBackground(SystemColor.info);
+		panelMetodos.setBackground(SystemColor.info);
+	}
+
+	private void pintarGris () {
+		setBackground(SystemColor.control);
+		panelAtributos.setBackground(SystemColor.control);
+		panelMetodos.setBackground(SystemColor.control);
+	}
+
+	private void pintarAzul () {
+		setBackground(SystemColor.activeCaption);
+		panelAtributos.setBackground(SystemColor.activeCaption);
+		panelMetodos.setBackground(SystemColor.activeCaption);
 	}
 
 
@@ -262,7 +292,7 @@ public class PanelClase extends JPanel {
 						String claseHija = lblNombreclase.getText();
 
 						try {
-							pe.getDiagrama().addHerencia(clasePadre, claseHija);
+							//pe.getDiagrama().addHerencia(clasePadre, claseHija);
 						} catch (Exception e1) {
 							HerenciaError her = new HerenciaError(PanelClase.this, e1.getMessage());
 							her.setVisible(true);
@@ -278,7 +308,7 @@ public class PanelClase extends JPanel {
 							Flecha f = new Flecha(pe.getFlechaInicio(), flechaFinal, pe.getPadreFlecha(), pe.getHijoFlecha());
 
 							pe.getLienzo().addHerencia(f);
-							Diagrama.getInstance().addFlechaHerencia(f);
+							//Diagrama.getInstance().addFlechaHerencia(f);
 
 							pe.setRelacionesPressed(false);
 							pe.getMenuLienzo().getMntmCancelar().setVisible(false);

@@ -3,8 +3,11 @@ package util;
 
 import javax.swing.JPopupMenu;
 import javax.swing.JMenuItem;
+
 import Clases.Atributo;
+import Clases.GestorUML;
 import Interfaz.ModificarAtributo;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -21,8 +24,8 @@ public class MenuContextualAtributo  extends JPopupMenu{
 		mntmEliminaratributo.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				pe.getClase().eliminarAtributo(atributo);
-				pe.actualizarAtributos();
+				GestorUML.getInstancie().getDiagramaSeleccionado().deleteAtributoClase(pe.getClase(), atributo); // se elimina el atributo de la clase
+				pe.actualizarAtributos(); // se actualiza la informacion de los atributos de la clase
 			}
 		});
 

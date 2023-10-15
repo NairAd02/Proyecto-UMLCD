@@ -1,22 +1,20 @@
 package Interfaz;
 
 import java.awt.*;
-
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
 
-import javax.swing.*;
 
+import javax.swing.*;
 
 import mensajesError.AtributosMismoName;
 import util.JTextFieldMejorado;
-
 import util.PanelClase;
 import Clases.Atributo;
 import Clases.Clase;
-
+import Clases.GestorUML;
 import Logica.Operaciones;
 
 import java.awt.event.KeyAdapter;
@@ -230,6 +228,6 @@ public class AgregarAtributo extends JFrame {
 		else // se seleccionó protected
 			acceso = "#";
 
-		clase.addAtributo(new Atributo(textFieldNombre.getText(), textFieldTipoDato.getText(), acceso));
+		GestorUML.getInstancie().getDiagramaSeleccionado().addAtributoClase(clase, new Atributo(textFieldNombre.getText(), textFieldTipoDato.getText(), acceso));  // se añade el atributo a la clase
 	}
 }

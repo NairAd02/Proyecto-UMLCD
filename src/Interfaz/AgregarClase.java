@@ -107,6 +107,7 @@ public class AgregarClase extends JFrame {
 					pe.setRadioBotonTipoClase(radioConcreta.getText());
 				
 				pe.setEnabled(true);
+				if (pe.getPant() != null)
 				pe.getPant().setEnabled(true);
 				pe.setInsertar(true);
 				dispose();

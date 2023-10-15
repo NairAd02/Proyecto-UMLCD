@@ -13,6 +13,7 @@ import mensajesError.NocumpleSobrec;
 import util.JTextFieldMejorado;
 import util.PanelClase;
 import util.ParametroTableModel;
+import Clases.GestorUML;
 import Clases.Metodo;
 import Clases.Parametro;
 import Logica.Operaciones;
@@ -130,6 +131,8 @@ public class ModificarMetodo extends JFrame {
 			public void mousePressed(MouseEvent e) {
 				if(!textFieldNombre.getText().equals("")&&!textFieldTipoDato.getText().equals("")&&(rdbtnAbstracto.isSelected()||rdbtnConcreto.isSelected())){
 					modificarMetodo();
+					Principal.getInstancie().setEnabled(true);
+					dispose();
 				}
 			}
 		});
@@ -584,12 +587,7 @@ public class ModificarMetodo extends JFrame {
 	}
 
 	private void modificarMetodo(){
-		String acceso = determinarModificadorDeAcceso();
-		metodo.setModificadorAcceso(acceso); // se modifica el modificador de acceso del metodo
-		metodo.setNombre(textFieldNombre.getText()); // se modifica el nombre el metodo
-		metodo.setTipoRetorno(textFieldTipoDato.getText()); // se modifica el tipo de retorno del metodo
-		metodo.setParametros(obtenerParametrosTabla()); // se modifican los posibles cambios en los parametos del metodo
-		metodo.setAbstracto(determinarAbstraccion()); // se modifica el tipo de metodo
+		GestorUML.getInstancie().getDiagramaSeleccionado().modificarMetodo(metodo, textFieldNombre.getText(), textFieldTipoDato.getText(), determinarModificadorDeAcceso(), determinarAbstraccion(), obtenerParametrosTabla()); // Se modifica el metodo
 		pe.actualizarMetodos(); // se actualiza la informacion de los metodos en caso de modificacion
 		pe.actualizarDimensionesClase(); // se actualiza las dimensiones de la clase en caso de que el atributo exceda los limites de la clase
 	}

@@ -1,17 +1,14 @@
 package Clases;
 
+import grafo.LinkedGraph;
+import grafo.Vertex;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import cu.edu.cujae.ceis.graph.LinkedGraph;
-import cu.edu.cujae.ceis.graph.interfaces.ILinkedWeightedEdgeDirectedGraph;
-import cu.edu.cujae.ceis.graph.interfaces.ILinkedWeightedVertexDirectedGraph;
-import cu.edu.cujae.ceis.graph.vertex.Vertex;
 import util.Flecha;
-import Interfaz.Lienzo;
+
 
 
 public class Diagrama implements  Serializable {
@@ -19,46 +16,41 @@ public class Diagrama implements  Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private ILinkedWeightedEdgeDirectedGraph grafoClases; // HACER IMPLEMENTACION PROPIA
+	private LinkedGraph grafoClases; // HACER IMPLEMENTACION PROPIA
 	private String nombre;
-	@JsonIgnore
-	private static Diagrama diagrama;
 	private ArrayList<Flecha> flechasHerencia;
+	private boolean estadoModificacion; // false si no se ha modificado, true si fue modificado
 
 
 
 
-	private Diagrama(String nombre) {
+	public Diagrama(String nombre) {
 
 		this.grafoClases = new LinkedGraph();
 		this.nombre = nombre;
-
+		this.estadoModificacion = false;
 		this.flechasHerencia = new ArrayList<Flecha>();
 	}
 
-	private Diagrama(){} // Constructor json
+	public Diagrama(){} // Constructor json
 
-	public static Diagrama getInstance(String nombre){
-		if(diagrama == null)
-			diagrama = new Diagrama(nombre);
 
-		return diagrama;
 
+	public boolean isEstadoModificacion() {
+		return estadoModificacion;
+	}
+
+	public void setEstadoModificacion(boolean estadoModificacion) {
+		this.estadoModificacion = estadoModificacion;
 	}
 
 	public void addFlechaHerencia(Flecha flecha){
 		this.flechasHerencia.add(flecha);
 	}
 
-	public static void setInstance(Diagrama d){
-		diagrama = d;
-	}
-
 	public String getNombre() {
 		return nombre;
 	}
-
-
 
 	public ArrayList<Flecha> getFlechasHerencia() {
 		return flechasHerencia;
@@ -68,16 +60,12 @@ public class Diagrama implements  Serializable {
 		this.nombre = nombre;
 	}
 
-	public static Diagrama getInstance(){
-		return diagrama;
-	}
 
-
-	public ILinkedWeightedEdgeDirectedGraph getGrafoClases() {
+	public LinkedGraph getGrafoClases() {
 		return grafoClases;
 	}
 
-	public void setGrafoClases(ILinkedWeightedEdgeDirectedGraph grafoClases) {
+	public void setGrafoClases(LinkedGraph grafoClases) {
 		this.grafoClases = grafoClases;
 	}
 
@@ -85,8 +73,10 @@ public class Diagrama implements  Serializable {
 	// OPERACIONES SOBRE EL DIAGRAMA
 	public void addClase(Clase clase){
 
-		if(this.validar(clase))
-			this.grafoClases.insertVertex(clase); // se inserta la clase como vertice del grafo
+		if(this.validar(clase)){
+			this.grafoClases.addVertice(clase); // se inserta la clase como vertice del grafo
+			this.estadoModificacion = true; // se indica que el diagrama fue modificado
+		}
 		else
 			throw new IllegalArgumentException();
 	}
@@ -95,7 +85,7 @@ public class Diagrama implements  Serializable {
 
 	public boolean validar(Clase clase) {
 		boolean validator = true;
-		Iterator<Vertex> iter = this.grafoClases.getVerticesList().iterator();
+		Iterator<Vertex> iter = this.grafoClases.getVertices().iterator();
 
 		while (iter.hasNext() && validator){
 			Clase claseAux = (Clase) iter.next().getInfo(); // se obtiene la clase del vertice correspodiente
@@ -109,7 +99,7 @@ public class Diagrama implements  Serializable {
 
 	public Clase buscarClase(String nombre){ // Buscar una clase en el grafo segun su nombre
 		Clase clase = null;
-		Iterator<Vertex> iter = this.grafoClases.getVerticesList().iterator();
+		Iterator<Vertex> iter = this.grafoClases.getVertices().iterator();
 
 		while (iter.hasNext() && clase == null) {
 			Clase claseAux = (Clase) iter.next().getInfo();
@@ -123,7 +113,7 @@ public class Diagrama implements  Serializable {
 
 	public int posClase(Clase clase){ // Buscar una clase en el grafo segun su referencia
 		int pos = -1;
-		Iterator<Vertex> iter = this.grafoClases.getVerticesList().iterator();
+		Iterator<Vertex> iter = this.grafoClases.getVertices().iterator();
 
 		while (iter.hasNext() && pos == -1) {
 			Clase claseAux = (Clase) iter.next().getInfo();
@@ -135,19 +125,79 @@ public class Diagrama implements  Serializable {
 	}
 
 	public void eliminarClase (Clase clase) { // Metodo para eliminar una clase del grafo
-		this.grafoClases.deleteVertex(this.grafoClases.getVerticesList().indexOf(clase)); // implementacion temporal
+		this.grafoClases.deleteVertice(clase); // implementacion temporal
+		this.estadoModificacion = true; // se indica que el diagrama fue modificado
 	}
 
+
+
 	// FIN OPERACIONES SOBRE EL DIAGRAMA
+	// OPERACIONES SOBRE LAS CLASES
+	// Insercciones
+	public void addAtributoClase (Clase clase, Atributo atributo) throws Exception { // Metodo para añadir un atributo a una clase
+		clase.addAtributo(atributo);
+		this.estadoModificacion = true; // se indica que el diagrama fue modificado
+	}
+
+	public void addMetodoClase (Clase clase, Metodo metodo) throws Exception { // Metodo para añadir un metodo a una clase
+		clase.addMetodo(metodo);
+		this.estadoModificacion = true; // se indica que el diagrama fue modificado
+	}
+	// Fin de insercciones
+
+	// Eliminaciones
+
+	public void deleteAtributoClase (Clase clase, Atributo atributo) {
+		clase.eliminarAtributo(atributo);
+		this.estadoModificacion = true; // se indica que el diagrama fue modificado
+	}
+
+	public void deleteMetodoClase (Clase clase, Metodo metodo) {
+		clase.elminarMetodo(metodo);
+		this.estadoModificacion = true; // se indica que el diagrama fue modificado
+	}
+
+	// Fin de eliminaciones
+
+	// Modificaciones
+
+	public void modificarNombreClase (Clase clase, String nombre) throws Exception {
+		clase.setNombre(nombre);
+		this.estadoModificacion = true; // se indica que el diagrama fue modificado
+	}
+
+	public void modificarAtributo (Atributo atributo, String nombre, String tipoDato, String acceso) {
+		atributo.setNombre(nombre);
+		atributo.setTipoDato(tipoDato);
+		atributo.setVisibilidad(acceso);
+		this.estadoModificacion = true; // se indica que el diagrama fue modificado
+	}
+
+	public void modificarMetodo (Metodo metodo, String nombre, String tipoDato, String acceso, boolean isAbstracto, ArrayList<Parametro> parametros) {
+		metodo.setNombre(nombre);
+		metodo.setTipoRetorno(tipoDato);
+		metodo.setModificadorAcceso(acceso);
+		metodo.setAbstracto(isAbstracto);
+		metodo.setParametros(parametros);
+		this.estadoModificacion = true; // se indica que el diagrama fue modificado
+	}
+	
+	public void modificarColorClase (Clase clase, String color) {
+		clase.setColor(color);
+		this.estadoModificacion = true; // se indica que el diagrama fue modificado
+	}
+
+	// Fin de modificaciones
+
 
 	// OPERACIONES RELACIONES
 	// OPERACIONES HERENCIA
 	public Clase obtenerPadreClase(String nombreClase){
 		return null;
 	}
-// AKIIIII DARIOOOOOOOOOOOO
+	// AKIIIII DARIOOOOOOOOOOOO
 	public void addRelacionHerencia(Clase clasePadre, Clase claseHija) throws Exception{
-		this.grafoClases.insertWEdgeDG(this.grafoClases.getVerticesList().indexOf(clasePadre), this.grafoClases.getVerticesList().indexOf(claseHija), determinarBoundsRelacionHerencia(clasePadre, claseHija));
+		this.grafoClases.addArista(this.grafoClases.buscarVertice(claseHija), this.grafoClases.buscarVertice(clasePadre), determinarBoundsRelacionHerencia(clasePadre, claseHija));;
 	}
 
 	public Relacion determinarBoundsRelacionHerencia (Clase clasePadre, Clase claseHija) {
@@ -160,23 +210,23 @@ public class Diagrama implements  Serializable {
 		return null;
 
 	}
-	
-	 
+
+
 	// FIN OPERACIONES HERENCIA
-	
+
 	// PARTE ADRIAN IMPLEMENTAR TODOS LOS DEMAS METODOS BASADOS EN LAS OPERACIONES SOBRE LAS RELACIONES
-	
+
 	// FIN OPERACIONES RELACIONES
 
 
 
 	public int totalClases(){ // Metodo para obtener la cantidad de clases del diagrama
-		return this.grafoClases.getVerticesList().size();
+		return this.grafoClases.getVertices().size();
 	}
 
 	public int cantClasesConcretas(){ // Metodo para obtener la cantidad de clases concretas del diagrama
 		int count = 0;
-		Iterator<Vertex> iter = this.grafoClases.getVerticesList().iterator();
+		Iterator<Vertex> iter = this.grafoClases.getVertices().iterator();
 
 		while (iter.hasNext() ) {
 			Clase claseAux = (Clase) iter.next().getInfo();
@@ -189,7 +239,7 @@ public class Diagrama implements  Serializable {
 
 	public int cantClasesAbstractas(){ // Metodo para obtener la cantidad de clases abstractas del diagrama
 		int count = 0;
-		Iterator<Vertex> iter = this.grafoClases.getVerticesList().iterator();
+		Iterator<Vertex> iter = this.grafoClases.getVertices().iterator();
 
 		while (iter.hasNext() ) {
 			Clase claseAux = (Clase) iter.next().getInfo();
@@ -348,10 +398,10 @@ public ArrayList<Clase> clasesSoloMetodosAbstractos(){
 
 	private boolean equalsClases (Diagrama d){ // TEMPORAL
 		boolean verificador = true;
-		Iterator<Vertex> iterD = d.getGrafoClases().getVerticesList().iterator();
-		Iterator<Vertex> iter = this.grafoClases.getVerticesList().iterator();
+		Iterator<Vertex> iterD = d.getGrafoClases().getVertices().iterator();
+		Iterator<Vertex> iter = this.grafoClases.getVertices().iterator();
 
-		if(this.grafoClases.getVerticesList().size() == d.getGrafoClases().getVerticesList().size()){
+		if(this.grafoClases.getVertices().size() == d.getGrafoClases().getVertices().size()){
 			while (iterD.hasNext() && verificador) {
 				Clase claseAuxD = (Clase) iterD.next().getInfo();
 				Clase claseAux = (Clase) iter.next().getInfo();

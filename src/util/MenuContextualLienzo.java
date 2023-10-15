@@ -29,6 +29,7 @@ public class MenuContextualLienzo extends JPopupMenu {
 				AgregarClase cl = new AgregarClase(pe);
 				cl.setVisible(true);
 				pe.setEnabled(false);
+				if (pe.getPant() != null)
 				pe.getPant().setEnabled(false);
 
 			}

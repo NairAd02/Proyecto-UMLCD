@@ -4,13 +4,19 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+
 import javax.swing.*;
+
 import util.PanelClase;
 import Clases.Atributo;
+import Clases.GestorUML;
 import Logica.Operaciones;
+
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+
 import javax.swing.border.LineBorder;
+
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
@@ -95,13 +101,11 @@ public class ModificarAtributo extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				if(!textFieldNombre.getText().equals("") && !textFieldTipoDato.getText().equals("") && Operaciones.isNumeroPrimeraPosicion(textFieldNombre.getText()) && Operaciones.isNumeroPrimeraPosicion(textFieldTipoDato.getText())){
-					String acceso = determinarModificadorDeAcceso();
-					atributo.setNombre(textFieldNombre.getText()); // se modifica el nombre del atributo
-					atributo.setTipoDato(textFieldTipoDato.getText()); // se modifica el tipo de dato del atributo
-					atributo.setVisibilidad(acceso); // se modifica la visibilidad del atributo
+					GestorUML.getInstancie().getDiagramaSeleccionado().modificarAtributo(atributo, textFieldNombre.getText(), textFieldTipoDato.getText(), determinarModificadorDeAcceso()); // Se modifica el atributo
 					pe.actualizarAtributos(); // se actualiza la informacion de los atributos para apreciar los cambios
 					pe.actualizarDimensionesClase(); // se actualiza las dimensiones de la clase en caso de que el atributo exceda los limites de la clase
-
+					Principal.getInstancie().setEnabled(true);
+					dispose();
 				}
 			}
 		});
