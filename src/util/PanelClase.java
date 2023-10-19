@@ -312,7 +312,7 @@ public class PanelClase extends JPanel {
 
 							pe.setRelacionesPressed(false);
 							pe.getMenuLienzo().getMntmCancelar().setVisible(false);
-							pe.getMenuLienzo().getMntmEstablecerRelacin().setVisible(true);
+						
 							pe.setHerencia(false);
 							pe.setHerenciaClase1(false);
 							pe.getLienzo().repaint();

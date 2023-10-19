@@ -31,7 +31,7 @@ public class Principal extends JFrame {
 	panelSuperior, panelSalir,panelAyuda,panelAcerca,panelMenu,panelHerram,panelArchivo,
 	panelHerramDesp,panelArchivoDesp,panelEstadÃ­sticas,panelChequear,panelZoom,panelNuevo,
 	panelAbrir,panelGuardar;
-	private JSeparator separator1, separator2, separator3,separator4,separator5,separator,
+	private JSeparator separator1, separator2, separator3,separator4,separator5,
 	separator_1,separator_2,separator_3,separator_4;
 	private JLabel lblAddClase, lblAddClaseImg, lblAddRelacion, lblAddRelacionImg, lblEditarClase, lblEditarClaseImg,
 	lblEliminarClase, lblEliminarClaseImg,lblSalir,labelAyuda,labelAyudaImg,lblArchivo,labelArchivoImg,
@@ -63,7 +63,6 @@ public class Principal extends JFrame {
 	private String padreFlecha, hijoFlecha;
 	private PanelClase claseSeleccionada1;
 	private JPanel panelContenedor;
-	private JSeparator separator_5;
 	private JSeparator separator_6;
 	private JSeparator separator_7;
 	private JSeparator separator_8;
@@ -488,6 +487,7 @@ public class Principal extends JFrame {
 		panelLateral.setLayout(null);
 
 		subpanel1 = new JPanel();
+		subpanel1.setBorder(new LineBorder(new Color(0, 0, 0)));
 		subpanel1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
@@ -497,7 +497,7 @@ public class Principal extends JFrame {
 					panelArchivoDesp.setVisible(false);
 					desplegadoArchivo = false;
 					menuLienzo.getMntmCancelar().setVisible(false);
-					menuLienzo.getMntmEstablecerRelacin().setVisible(true);
+					
 					lienzo.cancelarHerencia();
 					lienzo.repaint();
 					lienzo.revalidate();
@@ -556,6 +556,7 @@ public class Principal extends JFrame {
 		panelLateral.add(separator1);
 
 		subpanel2 = new JPanel();
+		subpanel2.setBorder(new LineBorder(new Color(0, 0, 0)));
 		subpanel2.setBounds(0, 162, 227, 170);
 		subpanel2.setBackground(new Color(0,58,87));
 		panelLateral.add(subpanel2);
@@ -579,7 +580,7 @@ public class Principal extends JFrame {
 						isInsertar = false;
 						isEliminar = false;
 						menuLienzo.getMntmCancelar().setVisible(true);
-						menuLienzo.getMntmEstablecerRelacin().setVisible(false);
+					
 
 					}
 					else if (isHerencia){
@@ -587,7 +588,7 @@ public class Principal extends JFrame {
 						isHerenciaClase1 = false;
 						isHerenciaClase2 = false;
 						menuLienzo.getMntmCancelar().setVisible(false);
-						menuLienzo.getMntmEstablecerRelacin().setVisible(true);
+						
 						lienzo.cancelarHerencia();
 						lienzo.repaint();
 						lienzo.revalidate();
@@ -636,6 +637,7 @@ public class Principal extends JFrame {
 		panelLateral.add(separator2);
 
 		subpanel3 = new JPanel();
+		subpanel3.setBorder(new LineBorder(new Color(0, 0, 0)));
 		subpanel3.setBackground(new Color(0,58,87));
 		subpanel3.setBounds(0, 334, 227, 156);
 		subpanel3.addMouseListener(new MouseAdapter() {
@@ -660,7 +662,7 @@ public class Principal extends JFrame {
 						isHerenciaClase1 = false;
 						isHerenciaClase2 = false;
 						menuLienzo.getMntmCancelar().setVisible(false);
-						menuLienzo.getMntmEstablecerRelacin().setVisible(true);
+						
 						lienzo.cancelarHerencia();
 						lienzo.repaint();
 						lienzo.revalidate();
@@ -718,6 +720,7 @@ public class Principal extends JFrame {
 
 
 		subpanel4 = new JPanel();
+		subpanel4.setBorder(new LineBorder(new Color(0, 0, 0)));
 		subpanel4.setBounds(0, 492, 227, 159);
 		subpanel4.setBackground(new Color(0,58,87));
 		subpanel4.addMouseListener(new MouseAdapter() {
@@ -742,7 +745,7 @@ public class Principal extends JFrame {
 						isHerenciaClase1 = false;
 						isHerenciaClase2 = false;
 						menuLienzo.getMntmCancelar().setVisible(false);
-						menuLienzo.getMntmEstablecerRelacin().setVisible(true);
+					
 						lienzo.cancelarHerencia();
 						lienzo.repaint();
 						lienzo.revalidate();
@@ -811,18 +814,13 @@ public class Principal extends JFrame {
 			}
 		});
 		panelSuperior.setBackground(new Color(47, 79, 79));
-		panelSuperior.setBorder(null);
+		panelSuperior.setBorder(new LineBorder(new Color(0, 0, 0)));
 		panelSuperior.setBounds(0, 0, 1100, 50);
 		panelContenedor.add(panelSuperior);
 		panelSuperior.setLayout(null);
 
-		separator = new JSeparator();
-		separator.setForeground(new Color(0, 0, 0));
-		separator.setBackground(new Color(0, 0, 0));
-		separator.setBounds(0, 48, 1100, 2);
-		panelSuperior.add(separator);
-
 		panelSalir = new JPanel();
+		panelSalir.setBorder(new LineBorder(new Color(0, 0, 0)));
 		panelSalir.setBounds(1050, 0, 50, 48);
 		panelSuperior.add(panelSalir);
 		panelSalir.setBackground(new Color(47, 79, 79));
@@ -864,6 +862,7 @@ public class Principal extends JFrame {
 		panelMenu.setLayout(null);
 
 		panelArchivo = new JPanel();
+		panelArchivo.setBorder(new LineBorder(new Color(0, 0, 0)));
 		panelArchivo.setBackground(Color.WHITE);
 		panelArchivo.setBounds(0, 0, 217, 50);
 		panelMenu.add(panelArchivo);
@@ -884,7 +883,7 @@ public class Principal extends JFrame {
 					isHerenciaClase1 = false;
 					isHerenciaClase2 = false;
 					menuLienzo.getMntmCancelar().setVisible(false);
-					menuLienzo.getMntmEstablecerRelacin().setVisible(true);
+					
 					if(lienzo != null){
 						lienzo.cancelarHerencia();
 						lienzo.repaint();
@@ -926,6 +925,7 @@ public class Principal extends JFrame {
 		panelArchivo.add(separator_6);
 
 		panelHerram = new JPanel();
+		panelHerram.setBorder(new LineBorder(new Color(0, 0, 0)));
 		panelHerram.setLayout(null);
 		panelHerram.setBackground(Color.WHITE);
 		panelHerram.setBounds(219, 0, 217, 50);
@@ -948,7 +948,7 @@ public class Principal extends JFrame {
 						isHerenciaClase1 = false;
 						isHerenciaClase2 = false;
 						menuLienzo.getMntmCancelar().setVisible(false);
-						menuLienzo.getMntmEstablecerRelacin().setVisible(true);
+						
 						if(lienzo != null){
 							lienzo.cancelarHerencia();
 							lienzo.repaint();
@@ -995,6 +995,7 @@ public class Principal extends JFrame {
 		panelHerram.add(separator_7);
 
 		panelAyuda = new JPanel();
+		panelAyuda.setBorder(new LineBorder(new Color(0, 0, 0)));
 		panelAyuda.setLayout(null);
 		panelAyuda.setBackground(Color.WHITE);
 		panelAyuda.setBounds(438, 0, 217, 50);
@@ -1010,7 +1011,7 @@ public class Principal extends JFrame {
 				isHerenciaClase1 = false;
 				isHerenciaClase2 = false;
 				menuLienzo.getMntmCancelar().setVisible(false);
-				menuLienzo.getMntmEstablecerRelacin().setVisible(true);
+				
 				if(lienzo != null){
 					lienzo.cancelarHerencia();
 					lienzo.repaint();
@@ -1052,6 +1053,7 @@ public class Principal extends JFrame {
 		panelAyuda.add(separator_8);
 
 		panelAcerca = new JPanel();
+		panelAcerca.setBorder(new LineBorder(new Color(0, 0, 0)));
 		panelAcerca.setLayout(null);
 		panelAcerca.setBackground(Color.WHITE);
 		panelAcerca.setBounds(657, 0, 216, 50);
@@ -1067,7 +1069,7 @@ public class Principal extends JFrame {
 				isHerenciaClase1 = false;
 				isHerenciaClase2 = false;
 				menuLienzo.getMntmCancelar().setVisible(false);
-				menuLienzo.getMntmEstablecerRelacin().setVisible(true);
+				
 				if(lienzo != null){
 					lienzo.cancelarHerencia();
 					lienzo.repaint();
@@ -1105,7 +1107,7 @@ public class Principal extends JFrame {
 		separator_9 = new JSeparator();
 		separator_9.setBackground(Color.BLACK);
 		separator_9.setForeground(Color.BLACK);
-		separator_9.setBounds(-1, 48, 215, 2);
+		separator_9.setBounds(-1, 48, 218, 2);
 		panelAcerca.add(separator_9);
 
 		separator4 = new JSeparator();
@@ -1131,29 +1133,24 @@ public class Principal extends JFrame {
 
 		menuLienzo = new  MenuContextualLienzo(Principal.this);
 
-		separator_5 = new JSeparator();
-		separator_5.setForeground(Color.BLACK);
-		separator_5.setBackground(Color.BLACK);
-		separator_5.setBounds(0, 0, 2000, 1);
-		panelContenedor.add(separator_5);
-
 		panelDiagramas = new JPanel();
+		panelDiagramas.setBorder(new LineBorder(new Color(0, 0, 0)));
 		panelDiagramas.setBackground(SystemColor.inactiveCaptionBorder);
-		panelDiagramas.setBounds(226, 101, 874, 599);
+		panelDiagramas.setBounds(226, 100, 874, 599);
 		panelContenedor.add(panelDiagramas);
 		panelDiagramas.setLayout(new BorderLayout(0, 0));
 
-		scrollPane = new JScrollPane();
-		panelDiagramas.add(scrollPane, BorderLayout.CENTER);
 
 		panelPestannaDiagramas = new JPanel();
+		panelPestannaDiagramas.setBorder(new LineBorder(new Color(0, 0, 0)));
 		FlowLayout flowLayout = (FlowLayout) panelPestannaDiagramas.getLayout();
 		flowLayout.setAlignment(FlowLayout.LEFT);
-		panelPestannaDiagramas.setBackground(Color.WHITE);
+		panelPestannaDiagramas.setBackground(SystemColor.activeCaptionBorder);
 		panelDiagramas.add(panelPestannaDiagramas, BorderLayout.NORTH);
 
-		actualizarPanelPestannaDiagramas();
 		habilitarPrograma();
+		actualizarPanelPestannaDiagramas();
+
 
 	}
 
@@ -1362,6 +1359,7 @@ public class Principal extends JFrame {
 			Clase claseAux = (Clase) iter.next().getInfo();
 			lienzo.add(new PanelClase(principal, claseAux)); // se crea un panel para guardar la informacion de la clase y se añade en el lienzo
 		}
+		
 		lienzo.repaint();
 		lienzo.revalidate();
 	}
@@ -1394,18 +1392,17 @@ public class Principal extends JFrame {
 
 	public void crearLienzo(){
 		lienzo = new Lienzo();
+		scrollPane = new JScrollPane();
 		scrollPane.setViewportView(lienzo); // se añade al scrollpane
 		panelDiagramas.remove(panelInicio); // se elimina el panelInicio
 		panelDiagramas.add(scrollPane, BorderLayout.CENTER);
 		accionesLienzo();
 		actualizarLienzo();
-
-
-
 	}
 
 	public void crearPanelInicio () {
 		panelInicio = new PanelInicio(Principal.this);
+		if (scrollPane != null)
 		panelDiagramas.remove(scrollPane); // se elimina el scrollPane
 		panelDiagramas.add(panelInicio, BorderLayout.CENTER);	
 		panelInicio.actualizarPosiscionImagenUML(); // se actualiza la posiscion de la imagen 
@@ -1445,8 +1442,8 @@ public class Principal extends JFrame {
 			lblHerramientasImg.setEnabled(false);
 		}
 
-		repaint();
-		revalidate();
+		panelDiagramas.repaint();
+		panelDiagramas.revalidate();
 
 	}
 

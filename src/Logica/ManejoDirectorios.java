@@ -1,13 +1,16 @@
 package Logica;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+
+import javax.imageio.ImageIO;
+
 import Clases.Diagrama;
 
 public class ManejoDirectorios {
@@ -73,6 +76,11 @@ public class ManejoDirectorios {
 			isGuardado = true;
 		
 		return isGuardado;	
+	}
+	
+	public static void guardarImagen (BufferedImage imagen, String nombreDiagrama) throws IOException {
+		
+		ImageIO.write(imagen, "png",new File("imagenes diagramas/" + nombreDiagrama + ".png"));
 	}
 
 }

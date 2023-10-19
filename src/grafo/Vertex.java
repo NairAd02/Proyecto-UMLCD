@@ -19,6 +19,7 @@ public class Vertex implements Serializable {
 
 	public Vertex(Object info) {
 		this.info = info;
+		this.aristas = new LinkedList<Edge>();
 	}
 
 	public Vertex () {}; // Constructor json

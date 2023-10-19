@@ -78,11 +78,15 @@ public class LabelArchivoGuardado extends JLabel{
 			}
 			else // se esta dentro de los diagramas previamente cargadoes
 				GestorUML.getInstancie().setDiagramaSeleccionado(diagrama); // se actualiza como diagrama cargado
-			
+
 			pe.actualizarPanelPestannaDiagramas(); // se actualiza la pestaña de diagramas
 			pe.setDiagrama(diagrama);
-			crearLienzo();
-			Principal.getInstancie().actualizarLienzo();
+			
+			if (GestorUML.getInstancie().getDiagramas().size() == 1) // si fue el primer diagrama que se añadio entonces se crea un lienzo
+				crearLienzo();
+			else // si no, solo se actualiza
+				Principal.getInstancie().actualizarLienzo();
+			
 			Principal.getInstancie().setEnabled(true);
 			di.dispose();
 
@@ -101,8 +105,7 @@ public class LabelArchivoGuardado extends JLabel{
 
 	public void crearLienzo(){
 		pe.habilitarPrograma();
-		pe.repaint();
-		pe.revalidate();
+
 	}
 
 }

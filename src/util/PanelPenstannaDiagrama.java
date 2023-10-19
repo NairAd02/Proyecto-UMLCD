@@ -116,7 +116,10 @@ public class PanelPenstannaDiagrama extends JPanel {
 	public void cerrarDiagrama () {
 		GestorUML.getInstancie().deleteDiagrama(diagrama);
 		Principal.getInstancie().actualizarPanelPestannaDiagramas();
+		if (GestorUML.getInstancie().getDiagramas().size() == 0) // Si no hay cargado ningun diagrama
 		Principal.getInstancie().habilitarPrograma(); // se actualiza la informacion del nuevo diagrama en el lienzo
+		else
+			Principal.getInstancie().actualizarLienzo(); // se actualiza la infomacion de las clases en el lienzo
 	}
 
 }

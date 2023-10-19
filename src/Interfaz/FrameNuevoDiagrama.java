@@ -1,33 +1,28 @@
 package Interfaz;
 
-import java.awt.BorderLayout;
+
+
 import java.awt.Color;
-import java.awt.EventQueue;
+
 import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
-import javax.swing.ButtonGroup;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.border.EmptyBorder;
+
 import javax.swing.border.LineBorder;
 
-import mensajesError.ClasesMismoName;
+
 import util.JTextFieldMejorado;
-import util.LabelArchivoGuardado;
+
 import Clases.Diagrama;
 import Clases.GestorUML;
 import Logica.ManejoDirectorios;
-import Logica.Operaciones;
+
 
 public class FrameNuevoDiagrama extends JFrame {
 
@@ -39,8 +34,6 @@ public class FrameNuevoDiagrama extends JFrame {
 	private Principal pe;
 	private JLabel labelNombre;
 	private JTextFieldMejorado textFieldNombreDiagrama;
-
-	private ButtonGroup bg;
 	private JPanel panelConfirmar;
 	private JLabel labelConfirmar;
 	private JPanel panelCancelar;
@@ -83,7 +76,6 @@ public class FrameNuevoDiagrama extends JFrame {
 		textFieldNombreDiagrama.setBounds(28, 75, 360, 34);
 		contentPane.add(textFieldNombreDiagrama);
 
-		bg = new ButtonGroup();
 
 		panelConfirmar = new JPanel();
 		panelConfirmar.setLayout(null);
@@ -135,7 +127,8 @@ public class FrameNuevoDiagrama extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				pe.setEnabled(true);
-				pe.getPant().setEnabled(true);
+				if (pe.getPant() != null) 
+					pe.getPant().setEnabled(true);
 				dispose();
 			}
 			@Override
@@ -179,7 +172,10 @@ public class FrameNuevoDiagrama extends JFrame {
 
 		GestorUML.getInstancie().addDiagrama(new Diagrama(textFieldNombreDiagrama.getText()));
 		pe.actualizarPanelPestannaDiagramas(); // se actualiza la pestaña de diagramas
-		pe.habilitarPrograma();
+		if (GestorUML.getInstancie().getDiagramas().size() == 0) // si no hay diagramas insertados
+			pe.habilitarPrograma();
+		else
+			pe.actualizarLienzo();
 		pe.setEnabled(true);
 		dispose();
 	}
