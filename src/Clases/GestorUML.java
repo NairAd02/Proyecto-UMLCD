@@ -55,7 +55,7 @@ public class GestorUML {
 		this.diagramas.remove(diagramaEliminar);
 
 		if (this.diagramas.size() != 0)
-			this.diagramaSeleccionado = this.diagramas.getFirst(); // se asigna el primer diagrama despues de la eliminacion
+			this.diagramaSeleccionado = this.diagramas.getLast(); // se asigna al ultimo diagrama despues de la eliminacion
 		else
 			this.diagramaSeleccionado = null;
 	}

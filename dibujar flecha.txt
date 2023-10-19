@@ -1,0 +1,3 @@
+Graphics g = label.getGraphics();
+        g.drawLine(0, 0, label.getWidth(), label.getHeight());
+        g.drawLine(label.getWidth(), 0, 0, label.getHeight());

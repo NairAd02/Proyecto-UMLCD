@@ -172,7 +172,7 @@ public class FrameNuevoDiagrama extends JFrame {
 
 		GestorUML.getInstancie().addDiagrama(new Diagrama(textFieldNombreDiagrama.getText()));
 		pe.actualizarPanelPestannaDiagramas(); // se actualiza la pestaña de diagramas
-		if (GestorUML.getInstancie().getDiagramas().size() == 0) // si no hay diagramas insertados
+		if (GestorUML.getInstancie().getDiagramas().size() == 1) // si solo hay un diagrama insertado
 			pe.habilitarPrograma();
 		else
 			pe.actualizarLienzo();
