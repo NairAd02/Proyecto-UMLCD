@@ -8,6 +8,7 @@ import Interfaz.AgregarAtributo;
 import Interfaz.AgregarMetodo;
 import Interfaz.EditarClase;
 import Interfaz.EliminarClase;
+import Interfaz.Principal;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -29,7 +30,7 @@ public class MenuContextual extends JPopupMenu {
 			public void mousePressed(MouseEvent arg0) {
 				AgregarAtributo atri = new AgregarAtributo(pe, clase);
 				atri.setVisible(true);
-				pe.getPe().setEnabled(false);
+				Principal.getInstance().setEnabled(false);
 			}
 		});
 
@@ -39,7 +40,7 @@ public class MenuContextual extends JPopupMenu {
 				EditarClase edi = new EditarClase(pe, clase);
 				pe.setMover(false);
 				edi.setVisible(true);
-				pe.getPe().setEnabled(false);
+				Principal.getInstance().setEnabled(false);
 			}
 		});
 		add(mntmEditarClase);
@@ -51,7 +52,7 @@ public class MenuContextual extends JPopupMenu {
 			public void mousePressed(MouseEvent arg0) {
 				AgregarMetodo metod = new AgregarMetodo(pe, clase);
 				metod.setVisible(true);
-				pe.getPe().setEnabled(false);
+				Principal.getInstance().setEnabled(false);
 			}
 		});
 		add(mntmAadirMetodo);
@@ -62,7 +63,7 @@ public class MenuContextual extends JPopupMenu {
 			public void mousePressed(MouseEvent arg0) {
 				EliminarClase eli = new EliminarClase(pe, clase);
 				eli.setVisible(true);
-				pe.getPe().setEnabled(false);
+				Principal.getInstance().setEnabled(false);
 
 			}
 		});

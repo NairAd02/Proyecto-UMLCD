@@ -1,26 +1,30 @@
 package Clases;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import Logica.ManejoDirectorios;
+
 public class GestorUML {
-	private LinkedList<Diagrama> diagramas;
-	private Diagrama diagramaSeleccionado;
+	private LinkedList<Proyecto> proyectos;
+	private Proyecto proyectoSeleccionado;
 	private static GestorUML gestor;
 
 
 	private GestorUML () {
-		this.diagramas = new LinkedList<Diagrama>();
+		this.proyectos = new LinkedList<Proyecto>();
 	}
 
 
-	public LinkedList<Diagrama> getDiagramas() {
-		return diagramas;
+	public LinkedList<Proyecto> getProyectos() {
+		return proyectos;
 	}
 
 
-	public void setDiagramas(LinkedList<Diagrama> diagramas) {
-		this.diagramas = diagramas;
+	public void setProyectos(LinkedList<Proyecto> proyectos) {
+		this.proyectos = proyectos;
 	}
 
 
@@ -36,44 +40,85 @@ public class GestorUML {
 	}
 
 
-	public Diagrama getDiagramaSeleccionado() {
-		return diagramaSeleccionado;
+	public Proyecto getProyectoSeleccionado() {
+		return proyectoSeleccionado;
 	}
 
 
-	public void setDiagramaSeleccionado(Diagrama diagramaSeleccionado) {
-		this.diagramaSeleccionado = diagramaSeleccionado;
+	public void setProyectoSeleccionado(Proyecto proyectoSeleccionado) {
+		this.proyectoSeleccionado = proyectoSeleccionado;
 	}
+
 
 	//OPERACIONES
-	public void addDiagrama (Diagrama diagrama) {
-		this.diagramas.add(diagrama);
-		this.setDiagramaSeleccionado(diagrama); // se asigna como diagrama seleccionado al diagrama añadido
+
+	public void mostrarProyecto (Proyecto proyectoCargado) {
+		// Lo primero es verificar si el proyecto ya fue cargado
+		Proyecto proyecto = buscarProyecto(proyectoCargado);
+
+		if (proyecto != null) // si ya fue cargado, entonces solo lo actualizamos como nuevo seleccionado
+			this.setProyectoSeleccionado(proyecto);
+
+		else  // si no, lo añadimos como nuevo proyecto cargado
+			this.addProyecto(proyectoCargado); 
 	}
 
-	public void deleteDiagrama (Diagrama diagramaEliminar) {
-		this.diagramas.remove(diagramaEliminar);
+	public void addProyecto (Proyecto proyecto) { // Metodo para añadir Proyecto
+		this.proyectos.add(proyecto);
+		this.setProyectoSeleccionado(proyecto); // se asigna como proyecto seleccionado al proyecto añadido
+	}
 
-		if (this.diagramas.size() != 0)
-			this.diagramaSeleccionado = this.diagramas.getLast(); // se asigna al ultimo diagrama despues de la eliminacion
+	public void deleteProyecto (Proyecto proyectoEliminar) {
+		this.proyectos.remove(proyectoEliminar);
+
+		if (this.proyectos.size() != 0)
+			this.proyectoSeleccionado = this.proyectos.getLast(); // se asigna al ultimo proyecto despues de la eliminacion
 		else
-			this.diagramaSeleccionado = null;
+			this.proyectoSeleccionado = null;
 	}
 
-	public boolean comprobarExistenciaDiagrama (Diagrama diagramaCargado) {
-		boolean encontrado = false;
+	private Proyecto buscarProyecto (Proyecto proyectoCargado) {
+		Proyecto proyecto = null;	
+		Iterator<Proyecto> iter = this.proyectos.iterator();
 
-		Iterator<Diagrama> iter = this.diagramas.iterator();
+		while (iter.hasNext() && proyecto == null) {
+			Proyecto proyectoAux = iter.next();
 
-		while (iter.hasNext() && !encontrado) {
-			Diagrama diagramaAux = iter.next();
-
-			if (diagramaAux.equals(diagramaCargado))
-				encontrado = true;
+			if (proyectoAux.getNombre().equalsIgnoreCase(proyectoCargado.getNombre())) // buscamos por el nombre, ya que el nombre es el identificador único
+				proyecto = proyectoAux;
 		}
 
-		return encontrado;
+		return proyecto;
 	}
+
+	// SISTEMA DE GUARDADO
+
+	public boolean comprobarEstadoModificacion() { // Metodo para comprobar si existió alguna modificación
+		boolean estadoModificacion = false;
+		Iterator<Proyecto> iterProyectos = this.proyectos.iterator();
+
+		while (iterProyectos.hasNext() && !estadoModificacion) {
+			if (iterProyectos.next().isModificado()) // si al menos un proyecto fue modificado
+				estadoModificacion = true;
+		}
+
+		return estadoModificacion;
+
+	}
+
+	
+	public void guardarAllProyectos () throws FileNotFoundException, IOException { // Metodo para guardar todos los proyectos que fueron modificados
+		Iterator<Proyecto> iterProyectos = this.proyectos.iterator();
+
+		// Se recorren todos los proyectos y se guardan los que han sido modificados
+		while (iterProyectos.hasNext() ) {
+			Proyecto proyectoAux = iterProyectos.next();
+			
+			if (proyectoAux.isModificado()) // si el proyecto fue modificado
+				ManejoDirectorios.guardarArchivo(proyectoAux); // se guarda
+		}
+	}
+	// FIN DE SISTEMA DE GUARDADO
 
 	//FIN OPERACIONES
 

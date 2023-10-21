@@ -1,10 +1,10 @@
 package util;
 
 import javax.swing.JLabel;
+
 import javax.swing.JPanel;
 import Clases.Diagrama;
 import Clases.GestorUML;
-import Interfaz.FrameDecisorPestannaDiagrama;
 import Interfaz.Principal;
 import java.awt.Font;
 import java.awt.SystemColor;
@@ -38,11 +38,11 @@ public class PanelPenstannaDiagrama extends JPanel {
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {
-				Diagrama diagramaAnterior = GestorUML.getInstancie().getDiagramaSeleccionado();
-				GestorUML.getInstancie().setDiagramaSeleccionado(diagrama); // se actualiza el diagrama seleccionado
-				Principal.getInstancie().actualizarColorPanelPestannaDiagrama(diagramaAnterior); // se actualiza el color del anterior panelPestaña
+				Diagrama diagramaAnterior = GestorUML.getInstancie().getProyectoSeleccionado().getDiagramaSeleccionado();
+				GestorUML.getInstancie().getProyectoSeleccionado().setDiagramaSeleccionado(diagrama); // se actualiza el diagrama seleccionado
+				Principal.getInstance().actualizarColorPanelPestannaDiagrama(diagramaAnterior); // se actualiza el color del anterior panelPestaña
 				colorPanel(); // se define un color de acuerdo a si está seleccionado o no el diagrama
-				Principal.getInstancie().actualizarLienzo(); // se actualiza la informacion del nuevo diagrama en el lienzo
+				Principal.getInstance().actualizarLienzo(); // se actualiza la informacion del nuevo diagrama en el lienzo
 			}
 		});
 		diagrama = d;
@@ -77,18 +77,8 @@ public class PanelPenstannaDiagrama extends JPanel {
 		lblX.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				// HACER COMPROBACION DE GUARDADO
-				if (!GestorUML.getInstancie().getDiagramaSeleccionado().isEstadoModificacion()){ // no ha sido modificado
-					cerrarDiagrama();
-				}
-				else {
-					FrameDecisorPestannaDiagrama decisor = new FrameDecisorPestannaDiagrama(PanelPenstannaDiagrama.this);
-					decisor.setVisible(true);
-					Principal.getInstancie().setEnabled(false);
-				}
-
-
-
+				// HACER COMPROBACION DE GUARDADO O NO
+					cerrarDiagrama();		
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -107,19 +97,16 @@ public class PanelPenstannaDiagrama extends JPanel {
 	}
 
 	public void colorPanel () {
-		if (GestorUML.getInstancie().getDiagramaSeleccionado().equals(diagrama))
+		if (GestorUML.getInstancie().getProyectoSeleccionado().getDiagramaSeleccionado().equals(diagrama))
 			setBackground(SystemColor.activeCaption);
 		else
 			setBackground(SystemColor.inactiveCaptionBorder);
 	}
 
 	public void cerrarDiagrama () {
-		GestorUML.getInstancie().deleteDiagrama(diagrama);
-		Principal.getInstancie().actualizarPanelPestannaDiagramas();
-		if (GestorUML.getInstancie().getDiagramas().size() == 0) // Si no hay cargado ningun diagrama
-		Principal.getInstancie().habilitarPrograma(); // se actualiza la informacion del nuevo diagrama en el lienzo
-		else
-			Principal.getInstancie().actualizarLienzo(); // se actualiza la infomacion de las clases en el lienzo
+		GestorUML.getInstancie().getProyectoSeleccionado().eliminarSeleccionDiagrama(diagrama);
+		Principal.getInstance().actualizarPanelPestannaDiagramas();
+		Principal.getInstance().actualizarEstado(); // se actualiza el estado del panel diagrama
 	}
 
 }

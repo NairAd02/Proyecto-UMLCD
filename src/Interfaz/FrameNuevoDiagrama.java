@@ -95,18 +95,10 @@ public class FrameNuevoDiagrama extends JFrame {
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {
-				if(!textFieldNombreDiagrama.getText().equals("") && !ManejoDirectorios.isSameName(textFieldNombreDiagrama.getText()) && ManejoDirectorios.comprobarEstadoDeGuardado(pe.getDiagrama())){
-					crearNuevoDiagrama();	
-				}
-				else if(ManejoDirectorios.isSameName(textFieldNombreDiagrama.getText())){
-					lblDiagramaSameNameError.setVisible(true);
-				}
-				else if(!ManejoDirectorios.comprobarEstadoDeGuardado(pe.getDiagrama())){
-					System.out.println("No esta guardado");
-				}
-				else{
-					lblErrorTexto.setVisible(true);
-				}
+
+				crearNuevoDiagrama();	
+
+
 			}
 		});
 
@@ -127,8 +119,7 @@ public class FrameNuevoDiagrama extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				pe.setEnabled(true);
-				if (pe.getPant() != null) 
-					pe.getPant().setEnabled(true);
+
 				dispose();
 			}
 			@Override
@@ -169,13 +160,9 @@ public class FrameNuevoDiagrama extends JFrame {
 
 
 	public void crearNuevoDiagrama(){
-
-		GestorUML.getInstancie().addDiagrama(new Diagrama(textFieldNombreDiagrama.getText()));
+		GestorUML.getInstancie().getProyectoSeleccionado().addDiagrama(new Diagrama(textFieldNombreDiagrama.getText()));
 		pe.actualizarPanelPestannaDiagramas(); // se actualiza la pestaña de diagramas
-		if (GestorUML.getInstancie().getDiagramas().size() == 1) // si solo hay un diagrama insertado
-			pe.habilitarPrograma();
-		else
-			pe.actualizarLienzo();
+		pe.actualizarEstado();
 		pe.setEnabled(true);
 		dispose();
 	}

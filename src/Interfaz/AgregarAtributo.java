@@ -7,6 +7,7 @@ import java.awt.event.MouseMotionAdapter;
 
 
 
+
 import javax.swing.*;
 
 import mensajesError.AtributosMismoName;
@@ -96,7 +97,7 @@ public class AgregarAtributo extends JFrame {
 						addAtributo(); // se añade el atributo a la clase
 						pe.actualizarAtributos(); // se actualiza la informacion de los atributos
 						pe.actualizarDimensionesClase(); // se actualiza las dimensiones de la clase en caso de que el atributo exceda los limites de la clase
-						Principal.getInstancie().setEnabled(true);
+						Principal.getInstance().setEnabled(true);
 						dispose();		
 					} catch (Exception e1) {
 						AtributosMismoName sameName = new AtributosMismoName(AgregarAtributo.this);
@@ -137,7 +138,7 @@ public class AgregarAtributo extends JFrame {
 		panelCancelar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				pe.getPe().setEnabled(true);
+				Principal.getInstance().setEnabled(true);
 				dispose();
 			}
 			@Override
@@ -228,6 +229,6 @@ public class AgregarAtributo extends JFrame {
 		else // se seleccionó protected
 			acceso = "#";
 
-		GestorUML.getInstancie().getDiagramaSeleccionado().addAtributoClase(clase, new Atributo(textFieldNombre.getText(), textFieldTipoDato.getText(), acceso));  // se añade el atributo a la clase
+		GestorUML.getInstancie().getProyectoSeleccionado().getDiagramaSeleccionado().addAtributoClase(clase, new Atributo(textFieldNombre.getText(), textFieldTipoDato.getText(), acceso));  // se añade el atributo a la clase
 	}
 }

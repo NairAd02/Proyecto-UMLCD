@@ -32,11 +32,7 @@ public class LabelAtributo extends JLabel {
 	 		public void mouseExited(MouseEvent e) {
 	 			setForeground(SystemColor.activeCaptionText);
 	 		}
-	 		@Override
-	 		public void mousePressed(MouseEvent e) {
-	 			Principal.getInstancie().getPanelHerramDesp().setVisible(false);
-	 			Principal.getInstancie().getPanelArchivoDesp().setVisible(false);
-	 		}
+	 	
 	 	});
 		
 		 setText(atributo.toString());

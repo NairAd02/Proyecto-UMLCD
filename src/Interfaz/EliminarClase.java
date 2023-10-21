@@ -58,10 +58,10 @@ public class EliminarClase extends JFrame {
 		panelConfirmar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				GestorUML.getInstancie().getDiagramaSeleccionado().eliminarClase(clase);
+				GestorUML.getInstancie().getProyectoSeleccionado().getDiagramaSeleccionado().eliminarClase(clase);
 				// Actualizar Lienzo con la logica del diagrama
-				Principal.getInstancie().actualizarLienzo();
-				Principal.getInstancie().setEnabled(true);
+				Principal.getInstance().actualizarLienzo();
+				Principal.getInstance().setEnabled(true);
 				dispose();
 			}
 			@Override
@@ -87,8 +87,8 @@ public class EliminarClase extends JFrame {
 		panelCancelar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				pe.getPe().getLienzo().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-				pe.getPe().setEnabled(true);
+				Principal.getInstance().getLienzo().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+				Principal.getInstance().setEnabled(true);
 				dispose();
 			}
 			@Override

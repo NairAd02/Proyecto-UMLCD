@@ -184,7 +184,7 @@ public class ModificarClase extends JFrame {
 		panelCancelar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				pe.getPe().setEnabled(true);
+				Principal.getInstance().setEnabled(true);
 				dispose();
 			}
 			@Override
@@ -227,7 +227,7 @@ public class ModificarClase extends JFrame {
 	}
 
 	public void modificarNombreClase() throws Exception {
-		GestorUML.getInstancie().getDiagramaSeleccionado().modificarNombreClase(clase, textFieldNombreClase.getText());
+		GestorUML.getInstancie().getProyectoSeleccionado().getDiagramaSeleccionado().modificarNombreClase(clase, textFieldNombreClase.getText());
 		pe.actualizarNombreClase();
 		pe.actualizarDimensionesClase(); // se actualiza las dimensiones de la clase en caso de que el atributo exceda los limites de la clase
 	}

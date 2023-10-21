@@ -113,7 +113,7 @@ public class EditarClase extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				cambiarColorClase();
-				Principal.getInstancie().setEnabled(true);
+				Principal.getInstance().setEnabled(true);
 				dispose();
 			}
 			@Override
@@ -139,7 +139,7 @@ public class EditarClase extends JFrame {
 		panel_1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				pe.getPe().setEnabled(true);
+				Principal.getInstance().setEnabled(true);
 				dispose();
 			}
 			@Override
@@ -187,7 +187,7 @@ public class EditarClase extends JFrame {
 			color = "Gris";
 
 
-		GestorUML.getInstancie().getDiagramaSeleccionado().modificarColorClase(clase, color); // se modifica el color de la clase
+		GestorUML.getInstancie().getProyectoSeleccionado().getDiagramaSeleccionado().modificarColorClase(clase, color); // se modifica el color de la clase
 		pe.actualizarColorClase(); // se actualiza el color de la clase del lienzo
 	}
 }

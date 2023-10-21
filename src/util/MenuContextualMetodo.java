@@ -1,14 +1,12 @@
 package util;
 
-import javax.swing.JLabel;
+
 import javax.swing.JPopupMenu;
 import javax.swing.JMenuItem;
-
 import Clases.GestorUML;
 import Clases.Metodo;
 import Interfaz.ModificarMetodo;
-import Logica.Operaciones;
-
+import Interfaz.Principal;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -26,7 +24,7 @@ public class MenuContextualMetodo extends JPopupMenu {
 			@Override
 			public void mousePressed(MouseEvent e) {
 
-				GestorUML.getInstancie().getDiagramaSeleccionado().deleteMetodoClase(pe.getClase(), metodo); // Se elimina el metodo de la clase
+				GestorUML.getInstancie().getProyectoSeleccionado().getDiagramaSeleccionado().deleteMetodoClase(pe.getClase(), metodo); // Se elimina el metodo de la clase
 				pe.actualizarMetodos(); // Se actualiza la informacion de los metodos de la clase
 			}
 		});
@@ -37,7 +35,7 @@ public class MenuContextualMetodo extends JPopupMenu {
 			public void mousePressed(MouseEvent arg0) {
 				ModificarMetodo modiMetod = new ModificarMetodo(pe, metodo);
 				modiMetod.setVisible(true);
-				pe.getPe().setEnabled(false);
+				Principal.getInstance().setEnabled(false);
 			}
 		});
 		add(mntmModificarMetodo);

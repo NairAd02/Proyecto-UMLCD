@@ -119,7 +119,7 @@ public class AgregarMetodo extends JFrame {
 						addMetodoDiagrama(); // se añade el metodo al diagrama
 						pe.actualizarMetodos(); // se actualiza la informacion de los metodos de la clase
 						pe.actualizarDimensionesClase(); // se actualiza las dimensiones de la clase en caso de que el atributo exceda los limites de la clase
-						Principal.getInstancie().setEnabled(true);
+						Principal.getInstance().setEnabled(true);
 						dispose();
 					} catch (Exception e1) {
 						if(e1.getMessage().equals("No cumple sobreCarga")){
@@ -172,7 +172,7 @@ public class AgregarMetodo extends JFrame {
 		panelCancelar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				pe.getPe().setEnabled(true);
+				Principal.getInstance().setEnabled(true);
 				dispose();
 			}
 			@Override
@@ -467,7 +467,7 @@ public class AgregarMetodo extends JFrame {
 		if (rdbtnAbstracto.isSelected())
 			isAbstracto = true;
 
-		GestorUML.getInstancie().getDiagramaSeleccionado().addMetodoClase(clase, new Metodo(textFieldNombre.getText(), obtenerAcceso(), isAbstracto,
+		GestorUML.getInstancie().getProyectoSeleccionado().getDiagramaSeleccionado().addMetodoClase(clase, new Metodo(textFieldNombre.getText(), obtenerAcceso(), isAbstracto,
 				textFieldTipoDato.getText(), obtenerParametrosTabla())); // Se añade el metodo a la clase
 	}
 

@@ -1,8 +1,6 @@
 package Interfaz;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.MouseAdapter;
@@ -14,15 +12,14 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
-import util.LabelArchivoGuardado;
 import util.PanelPenstannaDiagrama;
+import util.PanelPestannaProyecto;
 import Clases.GestorUML;
 import Logica.ManejoDirectorios;
 
-public class FrameDecisorPestannaDiagrama extends JFrame {
+public class FrameDecisorPestannaProyecto extends JFrame {
 
 	/**
 	 * 
@@ -33,9 +30,8 @@ public class FrameDecisorPestannaDiagrama extends JFrame {
 	private JLabel lblTexto;
 	private JPanel panelGuardar;
 	private JPanel panelCancelar;
-	private PanelPenstannaDiagrama panelPestannaDiagrama;
-	private String nombreDiagrama;
-	private JLabel lblNombreDiagrama;
+	private PanelPestannaProyecto panelPestannaProyecto;
+	private JLabel lblNombreProyecto;
 
 
 	/**
@@ -43,8 +39,8 @@ public class FrameDecisorPestannaDiagrama extends JFrame {
 	 */
 
 
-	public FrameDecisorPestannaDiagrama(PanelPenstannaDiagrama p) {
-		panelPestannaDiagrama = p;
+	public FrameDecisorPestannaProyecto(PanelPestannaProyecto p) {
+		panelPestannaProyecto = p;
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, 0, 509, 224);
@@ -75,7 +71,7 @@ public class FrameDecisorPestannaDiagrama extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				try {
-					ManejoDirectorios.guardarArchivo(GestorUML.getInstancie().getDiagramaSeleccionado()); // Se guarda la informacion de ese diagrama antes de cerrarlo
+					ManejoDirectorios.guardarArchivo(GestorUML.getInstancie().getProyectoSeleccionado()); // Se guarda la informacion de ese diagrama antes de cerrarlo
 				} catch (FileNotFoundException e1) {
 
 					e1.printStackTrace();
@@ -83,8 +79,8 @@ public class FrameDecisorPestannaDiagrama extends JFrame {
 
 					e1.printStackTrace();
 				}
-				panelPestannaDiagrama.cerrarDiagrama(); // se cierra la pestaña del diagrama
-				Principal.getInstancie().setEnabled(true);
+				panelPestannaProyecto.cerrarProyecto(); // se cierra la pestaña del diagrama
+				Principal.getInstance().setEnabled(true);
 				dispose();
 			}
 		});
@@ -112,7 +108,7 @@ public class FrameDecisorPestannaDiagrama extends JFrame {
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {
-				Principal.getInstancie().setEnabled(true);
+				Principal.getInstance().setEnabled(true);
 				dispose();
 			}
 		});
@@ -137,8 +133,8 @@ public class FrameDecisorPestannaDiagrama extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent e) {
 
-				panelPestannaDiagrama.cerrarDiagrama(); // se cierra la pestaña del diagrama
-				Principal.getInstancie().setEnabled(true);
+				panelPestannaProyecto.cerrarProyecto(); // se cierra la pestaña del diagrama
+				Principal.getInstance().setEnabled(true);
 				dispose();
 
 			}
@@ -154,11 +150,11 @@ public class FrameDecisorPestannaDiagrama extends JFrame {
 		lblNoGuardar.setBounds(10, 11, 113, 33);
 		panelNoGuardar.add(lblNoGuardar);
 
-		lblNombreDiagrama = new JLabel(GestorUML.getInstancie().getDiagramaSeleccionado().getNombre());
-		lblNombreDiagrama.setHorizontalAlignment(SwingConstants.LEFT);
-		lblNombreDiagrama.setFont(new Font("Dialog", Font.BOLD, 19));
-		lblNombreDiagrama.setBounds(10, 78, 489, 46);
-		contentPane.add(lblNombreDiagrama);
+		lblNombreProyecto = new JLabel(GestorUML.getInstancie().getProyectoSeleccionado().getNombre());
+		lblNombreProyecto.setHorizontalAlignment(SwingConstants.LEFT);
+		lblNombreProyecto.setFont(new Font("Dialog", Font.BOLD, 19));
+		lblNombreProyecto.setBounds(10, 78, 489, 46);
+		contentPane.add(lblNombreProyecto);
 
 	}
 

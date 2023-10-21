@@ -80,12 +80,7 @@ public class SeleccionClaseA extends JFrame {
 	private void labelDinamico(){
 		String text = null;
 		
-		if(pe.isRelacionesPressed())
-			text = "Seleccione las clases a relacionar.";
-		else if (pe.isEditarPressed())
-			text = "Seleccione la clase a editar.";
-		else if (pe.isEliminarPressed())
-			text = "Seleccione la clase a eliminar";
+		
 		
 		labelMensaje.setText(text);
 	}

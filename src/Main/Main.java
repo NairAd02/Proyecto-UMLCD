@@ -1,12 +1,9 @@
 package Main;
 
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-
-import Clases.Diagrama;
 import Interfaz.Principal;
 
 public class Main {
@@ -38,7 +35,7 @@ public class Main {
 		EventQueue.invokeLater(new Runnable() {		
 			public void run() {
 				try {
-					Principal frame = Principal.getInstancie();
+					Principal frame = Principal.getInstance();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();

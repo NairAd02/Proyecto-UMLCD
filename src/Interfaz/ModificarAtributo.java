@@ -101,10 +101,10 @@ public class ModificarAtributo extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				if(!textFieldNombre.getText().equals("") && !textFieldTipoDato.getText().equals("") && Operaciones.isNumeroPrimeraPosicion(textFieldNombre.getText()) && Operaciones.isNumeroPrimeraPosicion(textFieldTipoDato.getText())){
-					GestorUML.getInstancie().getDiagramaSeleccionado().modificarAtributo(atributo, textFieldNombre.getText(), textFieldTipoDato.getText(), determinarModificadorDeAcceso()); // Se modifica el atributo
+					GestorUML.getInstancie().getProyectoSeleccionado().getDiagramaSeleccionado().modificarAtributo(atributo, textFieldNombre.getText(), textFieldTipoDato.getText(), determinarModificadorDeAcceso()); // Se modifica el atributo
 					pe.actualizarAtributos(); // se actualiza la informacion de los atributos para apreciar los cambios
 					pe.actualizarDimensionesClase(); // se actualiza las dimensiones de la clase en caso de que el atributo exceda los limites de la clase
-					Principal.getInstancie().setEnabled(true);
+					Principal.getInstance().setEnabled(true);
 					dispose();
 				}
 			}
@@ -125,7 +125,7 @@ public class ModificarAtributo extends JFrame {
 		panelCancelar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				pe.getPe().setEnabled(true);
+				Principal.getInstance().setEnabled(true);
 				dispose();
 			}
 			@Override

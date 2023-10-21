@@ -41,7 +41,6 @@ public class Lienzo extends JPanel implements Runnable{
 	
 	
 	public Lienzo() {
-		setBorder(new LineBorder(new Color(0, 0, 0)));
 		
 		this.herencias = new ArrayList<Flecha>();
 		this.asociaciones = new ArrayList<Linea>();

@@ -12,11 +12,13 @@ import java.io.ObjectOutputStream;
 import javax.imageio.ImageIO;
 
 import Clases.Diagrama;
+import Clases.Proyecto;
 
 public class ManejoDirectorios {
 
 	public static void guardarArchivo(Object objeto) throws FileNotFoundException, IOException{
-		ObjectOutputStream stream = new ObjectOutputStream(new FileOutputStream("Salvas Diagrama/" + ((Diagrama) objeto).getNombre()));
+		
+		ObjectOutputStream stream = new ObjectOutputStream(new FileOutputStream("Salvas Diagrama/" + ((Proyecto) objeto).getNombre()));
 		stream.writeObject(objeto);
 		stream.close();
 		
@@ -47,6 +49,15 @@ public class ManejoDirectorios {
 			}
 			
 			return issameName;
+		}
+	
+	public static String[] obtenerNombreProyectos(){
+	       File rutaSalvas = new File("Salvas Diagrama");
+	       
+			
+			String[] list = rutaSalvas.list();
+					
+			return list;
 		}
 	
 	public static boolean comprobarEstadoDeGuardado(Diagrama diagramaActual){

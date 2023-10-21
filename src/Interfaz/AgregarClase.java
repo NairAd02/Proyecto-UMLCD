@@ -107,8 +107,6 @@ public class AgregarClase extends JFrame {
 					pe.setRadioBotonTipoClase(radioConcreta.getText());
 				
 				pe.setEnabled(true);
-				if (pe.getPant() != null)
-				pe.getPant().setEnabled(true);
 				pe.setInsertar(true);
 				dispose();
 				}
@@ -148,8 +146,7 @@ public class AgregarClase extends JFrame {
 		panelCancelar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				pe.setEnabled(true);
-				pe.getPant().setEnabled(true);
+				pe.setEnabled(true);			
 				dispose();
 			}
 			@Override

@@ -131,7 +131,7 @@ public class ModificarMetodo extends JFrame {
 			public void mousePressed(MouseEvent e) {
 				if(!textFieldNombre.getText().equals("")&&!textFieldTipoDato.getText().equals("")&&(rdbtnAbstracto.isSelected()||rdbtnConcreto.isSelected())){
 					modificarMetodo();
-					Principal.getInstancie().setEnabled(true);
+					Principal.getInstance().setEnabled(true);
 					dispose();
 				}
 			}
@@ -152,7 +152,7 @@ public class ModificarMetodo extends JFrame {
 		panelCancelar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				pe.getPe().setEnabled(true);
+				Principal.getInstance().setEnabled(true);
 				dispose();
 			}
 			@Override
@@ -587,7 +587,7 @@ public class ModificarMetodo extends JFrame {
 	}
 
 	private void modificarMetodo(){
-		GestorUML.getInstancie().getDiagramaSeleccionado().modificarMetodo(metodo, textFieldNombre.getText(), textFieldTipoDato.getText(), determinarModificadorDeAcceso(), determinarAbstraccion(), obtenerParametrosTabla()); // Se modifica el metodo
+		GestorUML.getInstancie().getProyectoSeleccionado().getDiagramaSeleccionado().modificarMetodo(metodo, textFieldNombre.getText(), textFieldTipoDato.getText(), determinarModificadorDeAcceso(), determinarAbstraccion(), obtenerParametrosTabla()); // Se modifica el metodo
 		pe.actualizarMetodos(); // se actualiza la informacion de los metodos en caso de modificacion
 		pe.actualizarDimensionesClase(); // se actualiza las dimensiones de la clase en caso de que el atributo exceda los limites de la clase
 	}

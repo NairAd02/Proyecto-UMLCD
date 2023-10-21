@@ -5,6 +5,7 @@ import javax.swing.JMenuItem;
 
 import Clases.Clase;
 import Interfaz.ModificarClase;
+import Interfaz.Principal;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -25,7 +26,7 @@ public class MenuContextualClase extends JPopupMenu {
 			public void mousePressed(MouseEvent e) {
 				ModificarClase modiClase = new ModificarClase(pe, clase);
 				modiClase.setVisible(true);
-				pe.getPe().setEnabled(false);
+				Principal.getInstance().setEnabled(false);
 			}
 		});
 		add(mntmModificarClase);

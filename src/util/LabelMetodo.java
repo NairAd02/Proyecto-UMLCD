@@ -3,6 +3,7 @@ package util;
 import javax.swing.JLabel;
 
 import Clases.Metodo;
+import Interfaz.Principal;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -20,11 +21,7 @@ public class LabelMetodo extends JLabel {
 		setForeground(SystemColor.activeCaptionText);
 		setFont(new Font("Microsoft YaHei", Font.PLAIN, 16));
 		addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				pe.getPe().getPanelHerramDesp().setVisible(false);
-	 			pe.getPe().getPanelArchivoDesp().setVisible(false);
-			}
+			
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				setForeground(SystemColor.activeCaption);

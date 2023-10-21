@@ -42,8 +42,7 @@ public class MenuContextualLienzo extends JPopupMenu {
 				AgregarClase cl = new AgregarClase(pe);
 				cl.setVisible(true);
 				pe.setEnabled(false);
-				if (pe.getPant() != null)
-				pe.getPant().setEnabled(false);
+				
 
 			}
 		});
@@ -52,9 +51,6 @@ public class MenuContextualLienzo extends JPopupMenu {
 		mntmCancelar = new JMenuItem("Cancelar Relación");
 		mntmCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				pe.setHerencia(false);
-				pe.setHerenciaClase1(false);	
-				pe.setHerenciaClase2(false);	
 				mntmCancelar.setVisible(false);
 				pe.getLienzo().cancelarHerencia();
 				pe.getLienzo().repaint();
@@ -79,16 +75,16 @@ public class MenuContextualLienzo extends JPopupMenu {
 		mntmGenerarimg.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Se crea un buffer para almacenar la imagen
-				BufferedImage image = new BufferedImage(Principal.getInstancie().getLienzo().getWidth(), Principal.getInstancie().getLienzo().getHeight(), BufferedImage.TYPE_INT_RGB);
+				BufferedImage image = new BufferedImage(Principal.getInstance().getLienzo().getWidth(), Principal.getInstance().getLienzo().getHeight(), BufferedImage.TYPE_INT_RGB);
 				
 				Graphics2D g2d = image.createGraphics();
 				
-				Principal.getInstancie().getLienzo().paint(g2d); // se dibuja la imagen apartir del contenido del panel
+				Principal.getInstance().getLienzo().paint(g2d); // se dibuja la imagen apartir del contenido del panel
 				
 				g2d.dispose();
 				
 				try {
-					ManejoDirectorios.guardarImagen(image, GestorUML.getInstancie().getDiagramaSeleccionado().getNombre()); // se guarda la imagen
+					ManejoDirectorios.guardarImagen(image, GestorUML.getInstancie().getProyectoSeleccionado().getDiagramaSeleccionado().getNombre()); // se guarda la imagen
 				} catch (IOException e1) {
 					
 					e1.printStackTrace();
