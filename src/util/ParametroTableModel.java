@@ -9,14 +9,14 @@ public class ParametroTableModel extends DefaultTableModel {
 
 	public ParametroTableModel(){
 
-		String[] columnNames = {"Parámetro"};    
+		String[] columnNames = {"Tipo de Dato", "Nombre"};    
 		this.setColumnIdentifiers(columnNames); 
 		
 
 	}
 	
-	public void adicionar(Parametro p){
-		Object[] newRow = new Object[]{p.getTipoDato()};
+	public void adicionar(String tipoDeDato, String nombre){
+		Object[] newRow = new Object[]{tipoDeDato, nombre};
 		addRow(newRow);
 	}
 	

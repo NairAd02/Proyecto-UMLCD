@@ -7,7 +7,6 @@ import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Iterator;
-
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -17,8 +16,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-
-import util.LabelDiagrama;
 import util.LabelProyectoGuardado;
 import Clases.Diagrama;
 import Clases.GestorUML;

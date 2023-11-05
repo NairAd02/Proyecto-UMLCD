@@ -1,7 +1,6 @@
 package Clases;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 public class Concreta extends Clase implements Serializable {
 
@@ -15,24 +14,27 @@ public class Concreta extends Clase implements Serializable {
 
 
 	}
-	
+
 	public Concreta(){
 		super();
 	}
 
 	public void addMetodo(Metodo metodo) throws Exception{
 		if(this.validarMetodo(metodo)){
-			if(!metodo.isAbstracto())
+			if (metodo instanceof MetodoConstructor)
 				this.metodos.add(metodo);
-			else
-				throw new Exception("Metodo Abstracto");	
-
+			else {
+				if( metodo instanceof MetodoOrdinario && !((MetodoOrdinario) metodo).isAbstracto())
+					this.metodos.add(metodo);
+				else
+					throw new Exception("Metodo Abstracto");
+			}
 		}
 		else{
-			
+
 			throw new Exception("No cumple sobreCarga");
 		}
 	}
-	
-	
+
+
 }

@@ -106,17 +106,28 @@ public class GestorUML {
 
 	}
 
-	
+	public void restablecerEstadosModificacion () { // Metodo que restablece el estado de modificacion de todos los proyectos a false
+		Iterator<Proyecto> iter = this.proyectos.iterator();
+
+		while (iter.hasNext()) {
+			iter.next().restablecerEstadoDeModificacion();
+		}
+	}
+
+
 	public void guardarAllProyectos () throws FileNotFoundException, IOException { // Metodo para guardar todos los proyectos que fueron modificados
 		Iterator<Proyecto> iterProyectos = this.proyectos.iterator();
 
 		// Se recorren todos los proyectos y se guardan los que han sido modificados
 		while (iterProyectos.hasNext() ) {
 			Proyecto proyectoAux = iterProyectos.next();
-			
+
 			if (proyectoAux.isModificado()) // si el proyecto fue modificado
-				ManejoDirectorios.guardarArchivo(proyectoAux); // se guarda
+				ManejoDirectorios.guardarArchivo(proyectoAux, proyectoAux.getRutaDeGuardado()); // se guarda
 		}
+
+		this.restablecerEstadosModificacion(); // se restablece el estado de modificacion de los proyectos a false una vez modificados
+
 	}
 	// FIN DE SISTEMA DE GUARDADO
 

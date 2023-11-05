@@ -7,11 +7,10 @@ public class Atributo extends Variable implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String nombre;
 	private String visibilidad;
 
 	public Atributo(String nombre, String tipoDato, String visibilidad) {
-		super(tipoDato);
+		super(tipoDato, nombre);
 		this.setVisibilidad(visibilidad);
 		this.setNombre(nombre);
 	}

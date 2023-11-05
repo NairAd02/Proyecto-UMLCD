@@ -133,15 +133,31 @@ public class Diagrama implements  Serializable {
 
 	// FIN OPERACIONES SOBRE EL DIAGRAMA
 	// OPERACIONES SOBRE LAS CLASES
+
 	// Insercciones
 	public void addAtributoClase (Clase clase, Atributo atributo) throws Exception { // Metodo para añadir un atributo a una clase
 		clase.addAtributo(atributo);
 		this.estadoModificacion = true; // se indica que el diagrama fue modificado
 	}
 
+	public void generarConstructorConTodosAtributos (Clase clase) {
+		clase.generarConstructorAtributos();
+		this.estadoModificacion = true;
+	}
+
 	public void addMetodoClase (Clase clase, Metodo metodo) throws Exception { // Metodo para añadir un metodo a una clase
 		clase.addMetodo(metodo);
 		this.estadoModificacion = true; // se indica que el diagrama fue modificado
+	}
+
+	public void generarGetAndSetAtributos (Clase clase) { // Metodo para generar los metodos get y set de todos los atributos de una clase
+		clase.generarGetsAndSets();
+		this.estadoModificacion = true;
+	}
+
+	public void generarGetAndSetAtributo (Clase clase, Atributo atributo) { // Metodo para generar los get y set de un atributo de una clase en especifico
+		clase.generarGetAndSet(atributo);
+		this.estadoModificacion = true;
 	}
 	// Fin de insercciones
 
@@ -173,15 +189,15 @@ public class Diagrama implements  Serializable {
 		this.estadoModificacion = true; // se indica que el diagrama fue modificado
 	}
 
-	public void modificarMetodo (Metodo metodo, String nombre, String tipoDato, String acceso, boolean isAbstracto, ArrayList<Parametro> parametros) {
+	public void modificarMetodoOrdinario (Metodo metodo, String nombre, String tipoDato, String acceso, boolean isAbstracto, ArrayList<Parametro> parametros) {
 		metodo.setNombre(nombre);
-		metodo.setTipoRetorno(tipoDato);
+		((MetodoOrdinario) metodo).setTipoRetorno(tipoDato);
 		metodo.setModificadorAcceso(acceso);
-		metodo.setAbstracto(isAbstracto);
+		((MetodoOrdinario) metodo).setAbstracto(isAbstracto);
 		metodo.setParametros(parametros);
 		this.estadoModificacion = true; // se indica que el diagrama fue modificado
 	}
-	
+
 	public void modificarColorClase (Clase clase, String color) {
 		clase.setColor(color);
 		this.estadoModificacion = true; // se indica que el diagrama fue modificado
@@ -378,42 +394,7 @@ public ArrayList<Clase> clasesSoloMetodosAbstractos(){
 
 	// METODOS PARA LA COMPARACION PARA EL SISTEMA DE GUARDADO
 
-	public boolean equals(Diagrama d){
-		boolean verificador = false;
 
-		if(this.equalsNombre(d) && this.equalsClases(d))
-			verificador = true;
-
-		return verificador;
-	}
-
-	private boolean equalsNombre (Diagrama d){
-		boolean verificador = false;
-
-		if(this.nombre.equals(d.getNombre()))
-			verificador = true;
-
-		return verificador;
-	}
-
-	private boolean equalsClases (Diagrama d){ // TEMPORAL
-		boolean verificador = true;
-		Iterator<Vertex> iterD = d.getGrafoClases().getVertices().iterator();
-		Iterator<Vertex> iter = this.grafoClases.getVertices().iterator();
-
-		if(this.grafoClases.getVertices().size() == d.getGrafoClases().getVertices().size()){
-			while (iterD.hasNext() && verificador) {
-				Clase claseAuxD = (Clase) iterD.next().getInfo();
-				Clase claseAux = (Clase) iter.next().getInfo();
-				if(!claseAuxD.equals(claseAux)) // utilizamos el metodo equals de implementacion propia para comparar dos referencias distintas del objeto clase
-					verificador = false;
-			}
-		}
-		else
-			verificador = false;
-
-		return verificador;
-	}
 
 	// FIN DE METODOS PARA LA COMPARACION PARA EL SISTEMA DE GUARDADO
 

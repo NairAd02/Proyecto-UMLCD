@@ -71,7 +71,7 @@ public class FrameDecisorPestannaProyecto extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				try {
-					ManejoDirectorios.guardarArchivo(GestorUML.getInstancie().getProyectoSeleccionado()); // Se guarda la informacion de ese diagrama antes de cerrarlo
+					ManejoDirectorios.guardarArchivo(panelPestannaProyecto.getProyecto(), panelPestannaProyecto.getProyecto().getRutaDeGuardado()); // Se guarda la informacion de ese diagrama antes de cerrarlo
 				} catch (FileNotFoundException e1) {
 
 					e1.printStackTrace();

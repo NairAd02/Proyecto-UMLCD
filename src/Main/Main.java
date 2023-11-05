@@ -9,7 +9,6 @@ import Interfaz.Principal;
 public class Main {
 
 
-
 	public static void main(String[] args) {
 		//Diagrama.getInstance("Prueba");
 

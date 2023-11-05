@@ -1,0 +1,36 @@
+public boolean equals(Diagrama d){
+		boolean verificador = false;
+
+		if(this.equalsNombre(d) && this.equalsClases(d))
+			verificador = true;
+
+		return verificador;
+	}
+
+	private boolean equalsNombre (Diagrama d){
+		boolean verificador = false;
+
+		if(this.nombre.equals(d.getNombre()))
+			verificador = true;
+
+		return verificador;
+	}
+
+	private boolean equalsClases (Diagrama d){ // TEMPORAL
+		boolean verificador = true;
+		Iterator<Vertex> iterD = d.getGrafoClases().getVertices().iterator();
+		Iterator<Vertex> iter = this.grafoClases.getVertices().iterator();
+
+		if(this.grafoClases.getVertices().size() == d.getGrafoClases().getVertices().size()){
+			while (iterD.hasNext() && verificador) {
+				Clase claseAuxD = (Clase) iterD.next().getInfo();
+				Clase claseAux = (Clase) iter.next().getInfo();
+				if(!claseAuxD.equals(claseAux)) // utilizamos el metodo equals de implementacion propia para comparar dos referencias distintas del objeto clase
+					verificador = false;
+			}
+		}
+		else
+			verificador = false;
+
+		return verificador;
+	}

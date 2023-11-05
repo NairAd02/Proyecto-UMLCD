@@ -8,18 +8,10 @@ public class Parametro extends Variable implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String nombre;
-	public Parametro( String tipoDato) {
-		super(tipoDato);
+	
+	public Parametro( String tipoDato, String nombre) {
+		super(tipoDato, nombre);
 
-	}
-
-	public String getNombre() {
-		return nombre;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
 	}
 
 	public Parametro(){

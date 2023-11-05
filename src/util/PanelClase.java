@@ -66,7 +66,7 @@ public class PanelClase extends JPanel {
 	public void setMover(boolean mover) {
 		this.mover = mover;
 	}
-	
+
 	public PanelClase getClaseSeleccionada() {
 		return claseSeleccionada;
 	}
@@ -109,7 +109,7 @@ public class PanelClase extends JPanel {
 		setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
 
 
-		
+
 		setBackground(SystemColor.control);
 		setBorder(new LineBorder(new Color(0, 0, 0)));
 		setLayout(new BorderLayout(0, 0));
@@ -121,7 +121,7 @@ public class PanelClase extends JPanel {
 		panelNombreClase.setLayout(new BorderLayout(0, 0));
 
 		lblNombreclase = new JLabel(clase.getNombre()); 
-		lblNombreclase.setFont(new Font("Microsoft YaHei", Font.PLAIN, 16));
+		lblNombreclase.setFont(new Font("Microsoft YaHei", Font.BOLD, 14));
 
 
 		lblNombreclase.setHorizontalAlignment(SwingConstants.CENTER);
@@ -154,9 +154,7 @@ public class PanelClase extends JPanel {
 		for (Atributo a : atributos) {
 			panelAtributos.add(new LabelAtributo(PanelClase.this, a));
 		}
-
-		repaint();
-		revalidate();
+		this.actualizarDimensionesClase();
 	}
 
 	public void actualizarMetodos (){ // Metodo para actualizar la infomacion de los atributos de una clase
@@ -166,14 +164,12 @@ public class PanelClase extends JPanel {
 			panelMetodos.add(new LabelMetodo(PanelClase.this, m));
 		}
 
-		repaint();
-		revalidate();
+		this.actualizarDimensionesClase();
 	}
 
 	public void actualizarNombreClase () { // Metodo para actualizar el nombre de la clase
 		this.lblNombreclase.setText(clase.getNombre());
-		repaint();
-		revalidate();
+		this.actualizarDimensionesClase();
 	}
 
 	public void actualizarPosicionesClase (int posX, int posY) { // Metodo para actualizar las posiciones de la clase
@@ -240,9 +236,9 @@ public class PanelClase extends JPanel {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				mover = true;
-					
-					mouseX = e.getX();
-					mouseY = e.getY();
+
+				mouseX = e.getX();
+				mouseY = e.getY();
 			}
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -263,7 +259,7 @@ public class PanelClase extends JPanel {
 					}
 
 
-					
+
 					Principal.getInstance().getLienzo().repaint();
 					Principal.getInstance().getLienzo().revalidate();
 				}

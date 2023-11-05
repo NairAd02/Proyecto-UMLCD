@@ -84,7 +84,7 @@ public class MenuContextualLienzo extends JPopupMenu {
 				g2d.dispose();
 				
 				try {
-					ManejoDirectorios.guardarImagen(image, GestorUML.getInstancie().getProyectoSeleccionado().getDiagramaSeleccionado().getNombre()); // se guarda la imagen
+					ManejoDirectorios.guardarImagen(image,GestorUML.getInstancie().getProyectoSeleccionado().getNombre() + " - " + GestorUML.getInstancie().getProyectoSeleccionado().getDiagramaSeleccionado().getNombre()); // se guarda la imagen
 				} catch (IOException e1) {
 					
 					e1.printStackTrace();

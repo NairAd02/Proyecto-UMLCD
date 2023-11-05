@@ -11,6 +11,8 @@ import Interfaz.Principal;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class MenuContextualAtributo  extends JPopupMenu{
 	private static final long serialVersionUID = 1L;
@@ -42,6 +44,15 @@ public class MenuContextualAtributo  extends JPopupMenu{
 		});
 		add(mntmModificarAtributo);
 		add(mntmEliminaratributo);
+		
+		JMenuItem mntmGenerarGetsY = new JMenuItem("Generar m\u00E9todos get y set");
+		mntmGenerarGetsY.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {		
+					GestorUML.getInstancie().getProyectoSeleccionado().getDiagramaSeleccionado().generarGetAndSetAtributo(pe.getClase(), atributo);
+					pe.actualizarMetodos(); // se actualiza la infomarcion de los metodos en el panel clase		
+			}
+		});
+		add(mntmGenerarGetsY);
 
 
 	}

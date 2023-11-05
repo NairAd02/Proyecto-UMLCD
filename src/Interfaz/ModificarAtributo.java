@@ -103,7 +103,6 @@ public class ModificarAtributo extends JFrame {
 				if(!textFieldNombre.getText().equals("") && !textFieldTipoDato.getText().equals("") && Operaciones.isNumeroPrimeraPosicion(textFieldNombre.getText()) && Operaciones.isNumeroPrimeraPosicion(textFieldTipoDato.getText())){
 					GestorUML.getInstancie().getProyectoSeleccionado().getDiagramaSeleccionado().modificarAtributo(atributo, textFieldNombre.getText(), textFieldTipoDato.getText(), determinarModificadorDeAcceso()); // Se modifica el atributo
 					pe.actualizarAtributos(); // se actualiza la informacion de los atributos para apreciar los cambios
-					pe.actualizarDimensionesClase(); // se actualiza las dimensiones de la clase en caso de que el atributo exceda los limites de la clase
 					Principal.getInstance().setEnabled(true);
 					dispose();
 				}

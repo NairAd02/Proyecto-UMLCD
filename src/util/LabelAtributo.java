@@ -21,7 +21,7 @@ public class LabelAtributo extends JLabel {
 	 	setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		 atributo = a;
 		 panelClase = p;
-	 	setFont(new Font("Microsoft YaHei", Font.PLAIN, 16));
+	 	setFont(new Font("Microsoft YaHei", Font.PLAIN, 12));
 	 	addMouseListener(new MouseAdapter() {
 	 		
 	 		@Override

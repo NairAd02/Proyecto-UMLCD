@@ -9,9 +9,11 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -39,6 +41,8 @@ public class FrameNuevoProyecto extends JFrame {
 	private JLabel labelCancelar;
 	private JLabel lblErrorTexto;
 	private JLabel lblDiagramaSameNameError;
+	private String rutaGuardar;
+	private String nombreProyecto;
 
 	/**
 	 * Create the frame.
@@ -97,7 +101,7 @@ public class FrameNuevoProyecto extends JFrame {
 
 				crearNuevoProyecto();
 				try {
-					ManejoDirectorios.guardarArchivo(GestorUML.getInstancie().getProyectoSeleccionado()); // se guarda el proyecto en memoria externa
+					ManejoDirectorios.guardarArchivo(GestorUML.getInstancie().getProyectoSeleccionado(), rutaGuardar); // se guarda el proyecto en memoria externa
 					pe.setEnabled(true);
 					dispose();
 				} catch (FileNotFoundException e1) {
@@ -161,13 +165,37 @@ public class FrameNuevoProyecto extends JFrame {
 		lblDiagramaSameNameError.setBounds(28, 21, 390, 14);
 		contentPane.add(lblDiagramaSameNameError);
 
+		JLabel lblRuta = new JLabel("Ruta");
+		lblRuta.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				JFileChooser fileChooser = new JFileChooser();
+				int returnValue = fileChooser.showSaveDialog(null);
+				if (returnValue == JFileChooser.APPROVE_OPTION) {// si se seleccionó un archivo
+					File selectedFile = fileChooser.getSelectedFile();
+					rutaGuardar = selectedFile.getAbsolutePath(); // se almacena la ruta donde se va a guardar el proyecto
+					nombreProyecto = selectedFile.getName(); // se almacena el nombre del proyecto
+				}
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+
+			}
+		});
+		lblRuta.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblRuta.setBounds(342, 21, 46, 14);
+		contentPane.add(lblRuta);
+
 	}
 
 	private void crearNuevoProyecto () {
-		GestorUML.getInstancie().addProyecto(new Proyecto(textFieldNombreProyecto.getText()));
+		GestorUML.getInstancie().addProyecto(new Proyecto(nombreProyecto, rutaGuardar));
 		Principal.getInstance().actualizarPanelProyectos();
 		Principal.getInstance().actualizarPanelPestannaDiagramas();
 		Principal.getInstance().actualizarEstado();
 	}
-
 }

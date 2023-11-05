@@ -1,7 +1,6 @@
-  package Clases;
+package Clases;
 
 import java.io.Serializable;
-
 import java.util.ArrayList;
 
 
@@ -60,7 +59,7 @@ public abstract class Clase implements Serializable  {
 		this.dimensionY = dimensionY;
 	}
 
-	
+
 	public int getPosicionX() {
 		return posicionX;
 	}
@@ -112,7 +111,11 @@ public abstract class Clase implements Serializable  {
 			throw new Exception("Error");
 	}
 
-	
+	public int cantAtributos () {
+		return this.atributos.size();
+	}
+
+	// METODOS INSERCCION DE METODOS
 	public void addMetodo(Metodo metodo) throws Exception{
 		if(this.validarMetodo(metodo)){
 			this.metodos.add(metodo);
@@ -123,38 +126,60 @@ public abstract class Clase implements Serializable  {
 		}
 	}
 
-	public void addAtributo(Atributo atributo) throws Exception{
-		if(validarAtributo(atributo)){
-			this.atributos.add(atributo);
-
+	public void generarConstructorAtributos () { // metodo para generarle constructor a la clase
+		try {
+			this.addMetodo(new MetodoConstructor(this.nombre, "+", this.parametrosConstructor()));
+		} catch (Exception e) {
+			// si no cumple la sobrecarga	
 		}
-		else
-			throw new Exception();
-
 	}
 
-	public boolean validarAtributo(Atributo atributo){
-		boolean x = true;
+	private ArrayList<Parametro> parametrosConstructor () { // Metodo para construir una lista de parametros de acuerdo con la informacion de los atributos de la clase
+		ArrayList<Parametro> parametrosConstructor = new ArrayList<Parametro>();
 
-		if(atributo==null)
-			x= false;
-		else{
-			for(int i=0;i<this.atributos.size()&&x==true;i++){
-				if(atributo.getNombre().equals(this.atributos.get(i).getNombre())) 
-					x = false;
-			}
+		for (Atributo a : this.atributos) {
+			parametrosConstructor.add(new Parametro(a.getTipoDato(), a.getNombre())); // se añaden todos los parametros apartir de la informacion de los atributos
 		}
 
-		return x;
+		return parametrosConstructor;
 	}
 
-	
+	public void generarGetsAndSets()  { // Metodo para generar los metodos set y get de todos los atributos de la clase
+
+
+		for (Atributo a : this.atributos) {
+			this.generarGetAndSet(a);		
+		}
+	}
+
+	public void generarGetAndSet(Atributo atributo)  { // Metodo para generar los metodos set y get de un atributo
+		try {
+			this.addMetodo(generarGetAtributo(atributo)); // se añade el metodo get del atributo a la lista de métodos de la clase
+		} catch (Exception e) {
+			// si no cumple la sobrecarga
+		} 
+		try {
+			this.addMetodo( generarSetAtributo(atributo)); // se añade el metodo set del atributo a la lista de métodos de la clase
+		} catch (Exception e) {
+			// si no cumple la sobrecarga
+		} 
+	}
+
+	private Metodo generarGetAtributo(Atributo atributo) { // Metodo para construir el método get del atributo correspondiente
+		return new MetodoOrdinario("get" + atributo.getNombre().replaceFirst(String.valueOf(atributo.getNombre().charAt(0)), 
+				String.valueOf(Character.toUpperCase(atributo.getNombre().charAt(0)))), "+", false, atributo.getTipoDato());
+	}
+
+	private Metodo generarSetAtributo(Atributo atributo) { // Metodo para construir el método set del atributo correspondiente
+		return new MetodoOrdinario("set" + atributo.getNombre().replaceFirst(String.valueOf(atributo.getNombre().charAt(0)), 
+				String.valueOf(Character.toUpperCase(atributo.getNombre().charAt(0)))) , "+", false, "void", new Parametro(atributo.getTipoDato(), atributo.getNombre()));
+	}
+
 	protected boolean validarMetodo(Metodo metodo){
 		boolean x=true;
 
-
 		for(int i=0; i<this.metodos.size() && x==true;i++){
-			if(metodo.getNombre().equals(this.metodos.get(i).getNombre())&&metodo.cantParametros()==this.metodos.get(i).cantParametros()&&
+			if(metodo.getNombre().equals(this.metodos.get(i).getNombre()) && metodo.cantParametros() == this.metodos.get(i).cantParametros() &&
 					this.tiposDatosParametros(metodo,this.metodos.get(i))){			
 				x=false;			
 			}
@@ -192,7 +217,38 @@ public abstract class Clase implements Serializable  {
 		return x;
 	}
 
-// METODO A IMPLEMENTAR EN LA CLASE DIAGRAMA 
+	// FIN DE METODOS DE INSERCCION DE METODOS
+
+	// METODOS INSERCCION ATRIBUTOS
+	public void addAtributo(Atributo atributo) throws Exception{
+		if(validarAtributo(atributo)){
+			this.atributos.add(atributo);
+
+		}
+		else
+			throw new Exception();
+
+	}
+
+	public boolean validarAtributo(Atributo atributo){
+		boolean x = true;
+
+		if(atributo==null)
+			x= false;
+		else{
+			for(int i=0;i<this.atributos.size()&&x==true;i++){
+				if(atributo.getNombre().equals(this.atributos.get(i).getNombre())) 
+					x = false;
+			}
+		}
+
+		return x;
+	}
+
+	// FIN METODOS INSERCCION ATRIBUTOS
+
+
+	// METODO A IMPLEMENTAR EN LA CLASE DIAGRAMA 
 	/*
 	public ArrayList<Atributo> ObtenerAtributos(){
 		ArrayList<Atributo> atributos = new ArrayList<Atributo>();
@@ -356,7 +412,7 @@ public abstract class Clase implements Serializable  {
 		return this.metodos.size();
 	}
 
-	
+
 
 	public void eliminarPadre(){
 		this.padre = null;
@@ -366,9 +422,9 @@ public abstract class Clase implements Serializable  {
 		this.hijos.remove(clase);
 	}
 
-	
 
-	
+
+
 	public boolean isDescendiente(Clase clase){
 		boolean veredicto = false;
 
@@ -390,8 +446,8 @@ public abstract class Clase implements Serializable  {
 
 	}
 
-	*/
-	
+	 */
+
 	// METODOS PARA COMPROBAR IGUALDAD EN EL SISTEMA DE GUARDADO
 
 	public boolean equals(Clase c){
@@ -403,24 +459,24 @@ public abstract class Clase implements Serializable  {
 		return verificador;
 
 	}
-	
+
 	public void elminarMetodo(Metodo metodo){
 		this.metodos.remove(metodo);
 	}
-	
+
 	public void cambiarMetodosAbstractosAConcretos(){
 
 		for(Metodo a: this.metodos){
-			if(a.isAbstracto())
-				a.setAbstracto(false);
+			if(a instanceof MetodoOrdinario && ((MetodoOrdinario) a).isAbstracto())
+				((MetodoOrdinario) a).setAbstracto(false);
 		}
 
 	}
-	
+
 	public void eliminarAtributo(Atributo atributo){
 		this.atributos.remove(atributo);
 	}
-	
+
 	private boolean equalsNombre(Clase c){
 		boolean verificador = false;
 

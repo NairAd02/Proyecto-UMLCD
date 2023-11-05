@@ -72,7 +72,7 @@ public class PanelPenstannaDiagrama extends JPanel {
 
 	private void addLblX () {
 		lblX = new JLabel("X");
-		lblX.setBorder(new LineBorder(new Color(0, 0, 0)));
+		lblX.setBorder(null);
 
 		lblX.addMouseListener(new MouseAdapter() {
 			@Override

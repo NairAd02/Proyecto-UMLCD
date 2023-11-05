@@ -3,29 +3,39 @@ package Clases;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Metodo implements TipoValidable, Serializable {
+public abstract class Metodo implements TipoValidable, Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String nombre;
-	private String modificadorAcceso;
-	private boolean abstracto;
-	private String tipoRetorno;
-	private ArrayList<Parametro> parametros;
+	protected String nombre;
+	protected String modificadorAcceso;
+	protected ArrayList<Parametro> parametros;
 
 
 
 
-	public Metodo(String nombre, String modificadorAcceso, boolean abstracto,
-			String tipoRetorno, ArrayList<Parametro> parametros) {
+	public Metodo(String nombre, String modificadorAcceso, ArrayList<Parametro> parametros) {
 
 		this.setNombre(nombre);
 		this.setModificadorAcceso(modificadorAcceso);
 		this.setParametros(parametros);
-		this.setTipoRetorno(tipoRetorno);
-		this.setAbstracto(abstracto);
+	}
+
+	public Metodo(String nombre, String modificadorAcceso) {
+
+		this.setNombre(nombre);
+		this.setModificadorAcceso(modificadorAcceso);
+		this.parametros = new ArrayList<Parametro>();
+	}
+
+	public Metodo(String nombre, String modificadorAcceso, Parametro parametro) {
+
+		this.setNombre(nombre);
+		this.setModificadorAcceso(modificadorAcceso);
+		this.parametros = new ArrayList<Parametro>();
+		this.parametros.add(parametro);
 	}
 
 	public Metodo(){}
@@ -37,10 +47,6 @@ public class Metodo implements TipoValidable, Serializable {
 
 	public void setModificadorAcceso(String modificadorAcceso) {
 		this.modificadorAcceso = modificadorAcceso;
-	}
-
-	public String getTipoRetorno() {
-		return tipoRetorno;
 	}
 
 	public ArrayList<Parametro> getParametros() {
@@ -64,19 +70,6 @@ public class Metodo implements TipoValidable, Serializable {
 		else
 			throw new IllegalArgumentException();
 
-	}
-
-	public void setTipoRetorno(String tipoRetorno) {
-		this.tipoRetorno = tipoRetorno;
-	}
-
-
-	public boolean isAbstracto() {
-		return abstracto;
-	}
-
-	public void setAbstracto(boolean abstracto) {
-		this.abstracto = abstracto;
 	}
 
 	public String getNombre() {
@@ -107,14 +100,7 @@ public class Metodo implements TipoValidable, Serializable {
 		return x;
 	}
 
-	public boolean equals(Metodo m){
-		boolean verificador = false;
-		if(this.equalsNombre(m) && this.equalsModificadorAcceso(m) && this.equalsisAbstracta(m) && this.equalsTipoRetorno(m) && this.equalsParametros(m))
-			verificador = true;
-
-		return verificador;
-	}
-
+	
 
 	private boolean equalsNombre(Metodo m){
 		boolean verificador = false;
@@ -134,23 +120,7 @@ public class Metodo implements TipoValidable, Serializable {
 		return verificador;
 	}
 
-	private boolean equalsisAbstracta (Metodo m){
-		boolean verificador = false;
-
-		if(m.isAbstracto() == this.isAbstracto())
-			verificador = true;
-
-		return verificador;
-	}
-
-	private boolean equalsTipoRetorno (Metodo m){
-		boolean verificador = false;
-
-		if(m.getTipoRetorno().equals(this.tipoRetorno))
-			verificador = true;
-
-		return verificador;
-	}
+	
 
 	private boolean equalsParametros (Metodo m){
 		boolean verificador = true;
@@ -168,20 +138,8 @@ public class Metodo implements TipoValidable, Serializable {
 		return verificador;
 	}
 
-	public String toString () { // Metodo para definir como se va a mostrar la informacion del metodo
-		String cadenaSalida = this.modificadorAcceso + " " + this.nombre + "(";
-
-
-		for (Parametro p : this.parametros) {
-			cadenaSalida += p.getNombre() + p.getTipoDato() + ", ";
-		}
-		if (this.parametros.size() != 0)
-			cadenaSalida = cadenaSalida.substring(0, cadenaSalida.length() - 2) + ")" + ": " + this.tipoRetorno;
-		else
-			cadenaSalida += ")" + ": " + this.tipoRetorno;
-
-		return cadenaSalida;
-	}
+	public abstract String toString (); // Metodo para definir como se va a mostrar la informacion del metodo
+		
 
 
 }

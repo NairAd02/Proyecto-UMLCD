@@ -70,7 +70,7 @@ public class PanelPestannaProyecto extends JPanel {
 		lblX.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				if (GestorUML.getInstancie().getProyectoSeleccionado().isModificado()) { // si el proyecto fue modificado
+				if (proyecto.isModificado()) { // si el proyecto fue modificado
 					FrameDecisorPestannaProyecto frameDecisor = new FrameDecisorPestannaProyecto(PanelPestannaProyecto.this);
 					frameDecisor.setVisible(true);
 					Principal.getInstance().setEnabled(false);
@@ -81,11 +81,13 @@ public class PanelPestannaProyecto extends JPanel {
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
-
+				lblX.setForeground(SystemColor.red);
+				setBackground(SystemColor.info);
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-
+				lblX.setForeground(SystemColor.black);
+				colorPanel();
 			}
 		});
 		lblX.setFont(new Font("Tahoma", Font.BOLD, 18));

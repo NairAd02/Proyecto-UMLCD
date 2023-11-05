@@ -229,7 +229,6 @@ public class ModificarClase extends JFrame {
 	public void modificarNombreClase() throws Exception {
 		GestorUML.getInstancie().getProyectoSeleccionado().getDiagramaSeleccionado().modificarNombreClase(clase, textFieldNombreClase.getText());
 		pe.actualizarNombreClase();
-		pe.actualizarDimensionesClase(); // se actualiza las dimensiones de la clase en caso de que el atributo exceda los limites de la clase
 	}
 
 	public boolean isCorrecto(){

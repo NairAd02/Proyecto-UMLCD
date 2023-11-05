@@ -96,7 +96,6 @@ public class AgregarAtributo extends JFrame {
 					try {
 						addAtributo(); // se añade el atributo a la clase
 						pe.actualizarAtributos(); // se actualiza la informacion de los atributos
-						pe.actualizarDimensionesClase(); // se actualiza las dimensiones de la clase en caso de que el atributo exceda los limites de la clase
 						Principal.getInstance().setEnabled(true);
 						dispose();		
 					} catch (Exception e1) {

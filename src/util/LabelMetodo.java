@@ -19,7 +19,7 @@ public class LabelMetodo extends JLabel {
 	public LabelMetodo(PanelClase p, Metodo m){
 		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		setForeground(SystemColor.activeCaptionText);
-		setFont(new Font("Microsoft YaHei", Font.PLAIN, 16));
+		setFont(new Font("Microsoft YaHei", Font.PLAIN, 12));
 		addMouseListener(new MouseAdapter() {
 			
 			@Override

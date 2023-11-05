@@ -11,12 +11,14 @@ public class Proyecto implements Serializable {
 	private LinkedList<Diagrama> diagramasCargados;
 	private Diagrama diagramaSeleccionado;
 	private boolean estadoModificacion;
+	private String rutaDeGuardado;
 
 
 
-	public Proyecto(String nombre) {
+	public Proyecto(String nombre, String rutaDeGuardado) {
 		super();
 		this.nombre = nombre;
+		this.rutaDeGuardado = rutaDeGuardado; // se alamcena la ruta donde será guardado el proyecto
 		this.diagramasMostrados = new LinkedList<Diagrama>();
 		this.diagramasCargados = new LinkedList<Diagrama>() ;
 		this.diagramaSeleccionado = null ;
@@ -31,18 +33,28 @@ public class Proyecto implements Serializable {
 		this.nombre = nombre;
 		this.estadoModificacion = true;
 	}
+	
+	public String getRutaDeGuardado() {
+		return rutaDeGuardado;
+	}
+	public void setRutaDeGuardado(String rutaDeGuardado) {
+		this.rutaDeGuardado = rutaDeGuardado;
+	}
+	
 	public LinkedList<Diagrama> getDiagramasMostrados() {
 		return diagramasMostrados;
 	}
 	public void setDiagramasMostrados(LinkedList<Diagrama> diagramasMostrados) {
 		this.diagramasMostrados = diagramasMostrados;
 	}
+	
 	public LinkedList<Diagrama> getDiagramasCargados() {
 		return diagramasCargados;
 	}
 	public void setDiagramasCargados(LinkedList<Diagrama> diagramasCargados) {
 		this.diagramasCargados = diagramasCargados;
 	}
+	
 	public Diagrama getDiagramaSeleccionado() {
 		return diagramaSeleccionado;
 	}
@@ -53,7 +65,6 @@ public class Proyecto implements Serializable {
 	public boolean isEstadoModificacion() {
 		return estadoModificacion;
 	}
-
 	public void setEstadoModificacion(boolean estadoModificacion) {
 		this.estadoModificacion = estadoModificacion;
 	}
@@ -74,18 +85,31 @@ public class Proyecto implements Serializable {
 		this.estadoModificacion = true; // se indica que el proyecto fue modificado
 	}
 
+	public void eliminacionFisicaDiagrama (Diagrama diagramaEliminar) {
+		if (!this.diagramasCargados.remove(diagramaEliminar)) // si no se pudo eliminar de esta lista diagramas cargados
+			this.diagramasMostrados.remove(diagramaEliminar); // se elimina de la lista de diagramas mostrados
+		if (diagramaEliminar.equals(this.diagramaSeleccionado))
+			this.actualizarDiagramaSeleccionado();
+
+		this.estadoModificacion = true; // se indica que el proyecto fue modificado
+	}
+
+	private void actualizarDiagramaSeleccionado () {
+		if (this.diagramasMostrados.size() != 0)
+			this.diagramaSeleccionado = this.diagramasMostrados.getLast(); // se asigna como seleccionado al ultimo diagrama mostrado
+		else
+			this.diagramaSeleccionado = null;
+	}
+
 	public void eliminarSeleccionDiagrama (Diagrama diagrama) { // Metodo para eliminar un diagrama mostrado e insertarlo como cargado
 		this.diagramasMostrados.remove(diagrama); // se elimina el diagrama de los mostrados
 		this.diagramasCargados.add(diagrama); // se inserta como cargado
 
 		if (this.diagramaSeleccionado.equals(diagrama)){ // si el diagrama actualmente selccionado resulta ser el que se desea  eliminar
-			if (this.diagramasMostrados.size() != 0)
-				this.diagramaSeleccionado = this.diagramasMostrados.getLast(); // se asigna como seleccionado al ultimo diagrama mostrado
-			else
-				this.diagramaSeleccionado = null;
+			this.actualizarDiagramaSeleccionado();
 		}
 	}
-	
+
 	public void eliminarDiagrama () {
 		// Se borra permanentemente la información del diagrama
 	}

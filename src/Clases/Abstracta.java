@@ -22,7 +22,7 @@ public class Abstracta extends Clase implements Serializable {
 	public ArrayList<Metodo> getAbstractos(){
 		ArrayList<Metodo> metodosAbstractos = new ArrayList<Metodo>();
 		for(Metodo a:this.metodos){
-			if(a.isAbstracto())
+			if( a instanceof MetodoOrdinario && ((MetodoOrdinario) a).isAbstracto())
 				metodosAbstractos.add(a);
 		}
 
@@ -35,7 +35,7 @@ public class Abstracta extends Clase implements Serializable {
 		boolean veredicto = true;
 
 		for(int i = 0; i<this.metodos.size() && veredicto == true; i++){
-			if(!this.metodos.get(i).isAbstracto())
+			if( this.metodos.get(i) instanceof MetodoOrdinario &&!((MetodoOrdinario) this.metodos.get(i)).isAbstracto())
 				veredicto = false;
 		}
 

@@ -34,6 +34,7 @@ import java.util.Iterator;
 import javax.swing.BoxLayout;
 import javax.swing.JSeparator;
 import javax.swing.border.LineBorder;
+import javax.swing.JFileChooser;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JMenu;
@@ -53,6 +54,7 @@ import Logica.ManejoDirectorios;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -93,6 +95,7 @@ public class Principal extends JFrame {
 	private JLabel lblVerDiagramas;
 	private JPanel panelMarcoSuperior;
 	private JLabel lblSalir;
+	private JMenuItem mntmGuardarProyectos;
 
 	/**
 	 * Launch the application.
@@ -115,8 +118,6 @@ public class Principal extends JFrame {
 
 	}
 	private Principal() {
-		setUndecorated(true);
-		setResizable(false);
 		setExtendedState(Frame.MAXIMIZED_BOTH);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -162,9 +163,36 @@ public class Principal extends JFrame {
 		mntmAbrirProyecto = new JMenuItem("Abrir Proyecto");
 		mntmAbrirProyecto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				// Se crea un sistema de exploracion
+				
+				 JFileChooser fileChooser = new JFileChooser();
+			        int returnValue = fileChooser.showOpenDialog(null);
+			        if (returnValue == JFileChooser.APPROVE_OPTION) {// si se seleccionó un archivo
+			            File selectedFile = fileChooser.getSelectedFile();
+			            
+						try {
+							Proyecto proyecto = (Proyecto) ManejoDirectorios.recuperarArchivo(selectedFile.getAbsolutePath());
+							proyecto.restablecerEstadoDeModificacion(); // se restablece el estado de modificación del proyecto a false (false es que no está modificado)
+				    		GestorUML.getInstancie().mostrarProyecto(proyecto);
+				    		Principal.getInstance().actualizarPanelProyectos(); // se actualiza el panel de proyectos
+				    		Principal.getInstance().actualizarPanelPestannaDiagramas(); // se actualiza el panel de los diagramas con los diagramas del proyecto
+				    		Principal.getInstance().actualizarEstado(); // se actualiza el estado del panel diagrama
+						} catch (FileNotFoundException e1) {
+							
+							e1.printStackTrace();
+						} catch (ClassNotFoundException e1) {
+							
+							e1.printStackTrace();
+						} catch (IOException e1) {
+							// No es compatible el archivo seleccionado
+							e1.printStackTrace();
+						}
+			    		
+			        }
+				/*
 				FrameProyectosAbrir frameProyectosAbrir = new FrameProyectosAbrir(Principal.this);
 				frameProyectosAbrir.setVisible(true);
-				setEnabled(false);
+				setEnabled(false)*/
 			}
 		});
 		mntmAbrirProyecto.setForeground(Color.BLACK);
@@ -177,13 +205,11 @@ public class Principal extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if (GestorUML.getInstancie().getProyectoSeleccionado() != null) {
 					try {
-						ManejoDirectorios.guardarArchivo(GestorUML.getInstancie().getProyectoSeleccionado());
+						ManejoDirectorios.guardarArchivo(GestorUML.getInstancie().getProyectoSeleccionado(), GestorUML.getInstancie().getProyectoSeleccionado().getRutaDeGuardado());
 						GestorUML.getInstancie().getProyectoSeleccionado().restablecerEstadoDeModificacion(); // restablecer estado de modificacion a false, una vez se haya guardado el proyecto
 					} catch (FileNotFoundException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}
@@ -192,6 +218,23 @@ public class Principal extends JFrame {
 		menuItemGuardarProyecto.setForeground(Color.BLACK);
 		menuItemGuardarProyecto.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		mnArchivo.add(menuItemGuardarProyecto);
+		
+		mntmGuardarProyectos = new JMenuItem("Guardar Proyectos");
+		mntmGuardarProyectos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					GestorUML.getInstancie().guardarAllProyectos(); // se guardan todos los proyectos cargados
+				} catch (FileNotFoundException e1) {
+					
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					
+					e1.printStackTrace();
+				} 
+			}
+		});
+		mntmGuardarProyectos.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		mnArchivo.add(mntmGuardarProyectos);
 
 		menuBar_1 = new JMenuBar();
 		menuBar_1.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -239,7 +282,7 @@ public class Principal extends JFrame {
 
 		panelLateral = new JPanel();
 		panelLateral.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panelLateral.setBackground(SystemColor.activeCaptionBorder);
+		panelLateral.setBackground(SystemColor.window);
 		contentPane.add(panelLateral, BorderLayout.WEST);
 		panelLateral.setLayout(new BorderLayout(0, 0));
 
@@ -248,7 +291,7 @@ public class Principal extends JFrame {
 		panelLateral.add(lblOpciones, BorderLayout.NORTH);
 
 		panelOpciones = new JPanel();
-		panelOpciones.setBackground(SystemColor.activeCaptionBorder);
+		panelOpciones.setBackground(SystemColor.window);
 		panelLateral.add(panelOpciones, BorderLayout.CENTER);
 		panelOpciones.setLayout(null);
 
@@ -303,7 +346,7 @@ public class Principal extends JFrame {
 		panelAddAgregacion.add(labelAgregacion);
 
 		JPanel panelInferior = new JPanel();
-		panelInferior.setBackground(SystemColor.activeCaptionBorder);
+		panelInferior.setBackground(SystemColor.window);
 		panelInferior.setBorder(new LineBorder(new Color(0, 0, 0)));
 		contentPane.add(panelInferior, BorderLayout.SOUTH);
 		panelInferior.setLayout(new BorderLayout(0, 0));
@@ -313,7 +356,7 @@ public class Principal extends JFrame {
 		panelInferior.add(lblProyectos, BorderLayout.WEST);
 
 		panelProyectos = new JPanel();
-		panelProyectos.setBackground(SystemColor.activeCaptionBorder);
+		panelProyectos.setBackground(SystemColor.window);
 		FlowLayout flowLayout_1 = (FlowLayout) panelProyectos.getLayout();
 		flowLayout_1.setAlignment(FlowLayout.LEFT);
 		panelInferior.add(panelProyectos, BorderLayout.CENTER);
@@ -332,12 +375,12 @@ public class Principal extends JFrame {
 		FlowLayout flowLayout = (FlowLayout) panelPestannaDiagramas.getLayout();
 		flowLayout.setAlignment(FlowLayout.LEFT);
 		panelPestannaDiagramas.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panelPestannaDiagramas.setBackground(SystemColor.activeCaptionBorder);
+		panelPestannaDiagramas.setBackground(SystemColor.window);
 		panelSuperiorPanelDiagramas.add(panelPestannaDiagramas, BorderLayout.CENTER);
 		
 		panelOpcionesDiagramas = new JPanel();
 		panelOpcionesDiagramas.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panelOpcionesDiagramas.setBackground(SystemColor.activeCaptionBorder);
+		panelOpcionesDiagramas.setBackground(SystemColor.window);
 		panelSuperiorPanelDiagramas.add(panelOpcionesDiagramas, BorderLayout.EAST);
 		panelOpcionesDiagramas.setLayout(new GridLayout(0, 1, 0, 0));
 		panelOpcionesDiagramas.setVisible(false);

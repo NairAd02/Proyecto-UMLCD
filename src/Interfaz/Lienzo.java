@@ -22,6 +22,7 @@ import util.LabelAtributo;
 import util.Linea;
 import util.PanelClase;
 import javax.swing.border.LineBorder;
+import java.awt.SystemColor;
 
 public class Lienzo extends JPanel implements Runnable{
 
@@ -41,6 +42,7 @@ public class Lienzo extends JPanel implements Runnable{
 	
 	
 	public Lienzo() {
+		setBackground(SystemColor.inactiveCaptionBorder);
 		
 		this.herencias = new ArrayList<Flecha>();
 		this.asociaciones = new ArrayList<Linea>();

@@ -16,9 +16,9 @@ import Clases.Proyecto;
 
 public class ManejoDirectorios {
 
-	public static void guardarArchivo(Object objeto) throws FileNotFoundException, IOException{
+	public static void guardarArchivo(Object objeto, String ruta) throws FileNotFoundException, IOException{
 		
-		ObjectOutputStream stream = new ObjectOutputStream(new FileOutputStream("Salvas Diagrama/" + ((Proyecto) objeto).getNombre()));
+		ObjectOutputStream stream = new ObjectOutputStream(new FileOutputStream(ruta));
 		stream.writeObject(objeto);
 		stream.close();
 		
@@ -28,7 +28,7 @@ public class ManejoDirectorios {
 	public static Object recuperarArchivo(String ruta) throws FileNotFoundException, IOException, ClassNotFoundException{
 		Object objetoArecuperar = null;
 		
-		ObjectInputStream stream = new ObjectInputStream(new FileInputStream("Salvas Diagrama/" + ruta));
+		ObjectInputStream stream = new ObjectInputStream(new FileInputStream(ruta));
 		objetoArecuperar = stream.readObject();
 		stream.close();
 

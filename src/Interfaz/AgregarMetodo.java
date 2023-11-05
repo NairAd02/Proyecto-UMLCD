@@ -5,7 +5,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
+
 import javax.swing.*;
+
 import mensajesError.AbstractoAConcreta;
 import mensajesError.NocumpleSobrec;
 import Clases.*;
@@ -13,10 +15,12 @@ import Logica.Operaciones;
 import util.JTextFieldMejorado;
 import util.PanelClase;
 import util.ParametroTableModel;
+
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+
 import javax.swing.border.LineBorder;
 
 public class AgregarMetodo extends JFrame {
@@ -43,7 +47,7 @@ public class AgregarMetodo extends JFrame {
 	private int mouseY;
 	private JLabel lblParmetros;
 	private JPanel panel;
-	private JTextFieldMejorado textFieldParam;
+	private JTextFieldMejorado textFieldParamTipoDeDato;
 	private JScrollPane scrollPane;
 	private JLabel labelPlus;
 	private JLabel labelMinus;
@@ -59,6 +63,7 @@ public class AgregarMetodo extends JFrame {
 	private JLabel lblTipoDeMtodo;
 	private JLabel lblA;
 	private Clase clase;
+	private JTextFieldMejorado textFieldParametroNombre;
 
 
 	public PanelClase getPe() {
@@ -118,7 +123,6 @@ public class AgregarMetodo extends JFrame {
 					try {
 						addMetodoDiagrama(); // se añade el metodo al diagrama
 						pe.actualizarMetodos(); // se actualiza la informacion de los metodos de la clase
-						pe.actualizarDimensionesClase(); // se actualiza las dimensiones de la clase en caso de que el atributo exceda los limites de la clase
 						Principal.getInstance().setEnabled(true);
 						dispose();
 					} catch (Exception e1) {
@@ -243,13 +247,13 @@ public class AgregarMetodo extends JFrame {
 		textFieldTipoDato.setBounds(149, 194, 164, 24);
 		contentPane.add(textFieldTipoDato);
 
-		lblParmetros = new JLabel("Nombre:");
+		lblParmetros = new JLabel("Tipo de Dato:");
 		lblParmetros.setFont(new Font("Dialog", Font.BOLD, 12));
-		lblParmetros.setBounds(439, 81, 113, 14);
+		lblParmetros.setBounds(502, 91, 98, 14);
 		contentPane.add(lblParmetros);
 
 		panel = new JPanel();
-		panel.setBounds(338, 81, 91, 117);
+		panel.setBounds(323, 60, 157, 137);
 		contentPane.add(panel);
 		panel.setLayout(new BorderLayout(0, 0));
 
@@ -284,29 +288,29 @@ public class AgregarMetodo extends JFrame {
 		table.getTableHeader().setReorderingAllowed(false);
 		scrollPane.setViewportView(table);
 
-		textFieldParam = new JTextFieldMejorado();
-		textFieldParam.addKeyListener(new KeyAdapter() {
+		textFieldParamTipoDeDato = new JTextFieldMejorado();
+		textFieldParamTipoDeDato.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent arg0) {
-				if(textFieldParam.getSelectedText()==null)
-					textFieldParam.setText(textFieldParam.getText().trim());
+				if(textFieldParamTipoDeDato.getSelectedText()==null)
+					textFieldParamTipoDeDato.setText(textFieldParamTipoDeDato.getText().trim());
 			}
 		});
-		textFieldParam.setLimite(30);
-		textFieldParam.setBounds(439, 97, 122, 20);
-		contentPane.add(textFieldParam);
-		textFieldParam.setColumns(10);
+		textFieldParamTipoDeDato.setLimite(30);
+		textFieldParamTipoDeDato.setBounds(502, 108, 98, 20);
+		contentPane.add(textFieldParamTipoDeDato);
+		textFieldParamTipoDeDato.setColumns(10);
 
 		panelPlus = new JPanel();
-		panelPlus.setBounds(519, 147, 50, 50);
+		panelPlus.setBounds(550, 147, 50, 50);
 		panelPlus.setBackground(new Color(153,204,204));
 		panelPlus.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(!textFieldParam.getText().equals("")){
-					Parametro para = new Parametro(textFieldParam.getText());
-					((ParametroTableModel) table.getModel()).adicionar(para);
-					textFieldParam.setText("");
+				if(!textFieldParamTipoDeDato.getText().equals("") && !textFieldParametroNombre.getText().equals("")){ // HACER VERIFICACION DE DUPLICIDAD DE PARAMETROS
+					((ParametroTableModel) table.getModel()).adicionar(textFieldParamTipoDeDato.getText(), textFieldParametroNombre.getText());
+					textFieldParamTipoDeDato.setText("");
+					textFieldParametroNombre.setText("");
 				}
 			}
 			@Override
@@ -327,7 +331,7 @@ public class AgregarMetodo extends JFrame {
 		labelPlus.setIcon(new ImageIcon(AgregarMetodo.class.getResource("/images/plus.png")));
 
 		panelMinus = new JPanel();
-		panelMinus.setBounds(439, 147, 50, 50);
+		panelMinus.setBounds(490, 147, 50, 50);
 		panelMinus.setBackground(new Color(153,204,204));
 		panelMinus.addMouseListener(new MouseAdapter() {
 			@Override
@@ -388,12 +392,12 @@ public class AgregarMetodo extends JFrame {
 
 		JLabel label = new JLabel("Remover:");
 		label.setFont(new Font("Dialog", Font.BOLD, 12));
-		label.setBounds(439, 128, 61, 20);
+		label.setBounds(489, 125, 61, 20);
 		contentPane.add(label);
 
 		JLabel label_1 = new JLabel("A\u00F1adir:");
 		label_1.setFont(new Font("Dialog", Font.BOLD, 12));
-		label_1.setBounds(519, 128, 50, 20);
+		label_1.setBounds(550, 125, 50, 20);
 		contentPane.add(label_1);
 
 		separator = new JSeparator();
@@ -408,12 +412,23 @@ public class AgregarMetodo extends JFrame {
 		lblA = new JLabel("A\u00F1adir Par\u00E1metro:");
 		lblA.setHorizontalAlignment(SwingConstants.CENTER);
 		lblA.setFont(new Font("Dialog", Font.BOLD, 14));
-		lblA.setBounds(338, 48, 250, 24);
+		lblA.setBounds(338, 19, 250, 24);
 		contentPane.add(lblA);
 
 		JSeparator separator_1 = new JSeparator();
-		separator_1.setBounds(336, 72, 252, 2);
+		separator_1.setBounds(338, 47, 252, 2);
 		contentPane.add(separator_1);
+		
+		textFieldParametroNombre = new JTextFieldMejorado();
+		textFieldParametroNombre.setLimite(30);
+		textFieldParametroNombre.setColumns(10);
+		textFieldParametroNombre.setBounds(502, 72, 98, 20);
+		contentPane.add(textFieldParametroNombre);
+		
+		JLabel lblNombre = new JLabel("Nombre:");
+		lblNombre.setFont(new Font("Dialog", Font.BOLD, 12));
+		lblNombre.setBounds(502, 54, 98, 14);
+		contentPane.add(lblNombre);
 
 
 	}
@@ -423,7 +438,7 @@ public class AgregarMetodo extends JFrame {
 		int cantRows = ((ParametroTableModel)table.getModel()).getRowCount();
 
 		for(int i=0 ;i<cantRows;i++ ){
-			parametros.add(new Parametro(String.valueOf(((ParametroTableModel)table.getModel()).getValueAt(i, 0))));
+			parametros.add(new Parametro(String.valueOf(((ParametroTableModel)table.getModel()).getValueAt(i, 0)), String.valueOf(((ParametroTableModel)table.getModel()).getValueAt(i, 1)))); // TEMPORAL
 			System.out.println((String.valueOf(((ParametroTableModel)table.getModel()).getValueAt(i, 0))));
 
 		}
@@ -467,7 +482,7 @@ public class AgregarMetodo extends JFrame {
 		if (rdbtnAbstracto.isSelected())
 			isAbstracto = true;
 
-		GestorUML.getInstancie().getProyectoSeleccionado().getDiagramaSeleccionado().addMetodoClase(clase, new Metodo(textFieldNombre.getText(), obtenerAcceso(), isAbstracto,
+		GestorUML.getInstancie().getProyectoSeleccionado().getDiagramaSeleccionado().addMetodoClase(clase, new MetodoOrdinario(textFieldNombre.getText(), obtenerAcceso(), isAbstracto,
 				textFieldTipoDato.getText(), obtenerParametrosTabla())); // Se añade el metodo a la clase
 	}
 

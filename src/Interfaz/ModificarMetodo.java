@@ -15,6 +15,7 @@ import util.PanelClase;
 import util.ParametroTableModel;
 import Clases.GestorUML;
 import Clases.Metodo;
+import Clases.MetodoOrdinario;
 import Clases.Parametro;
 import Logica.Operaciones;
 
@@ -47,7 +48,7 @@ public class ModificarMetodo extends JFrame {
 	private int mouseY;
 	private JLabel lblParmetros;
 	private JPanel panel;
-	private JTextFieldMejorado textFieldParam;
+	private JTextFieldMejorado textFieldParamTipoDeDato;
 	private JScrollPane scrollPane;
 	private JLabel labelPlus;
 	private JLabel labelMinus;
@@ -65,6 +66,7 @@ public class ModificarMetodo extends JFrame {
 	private JLabel labelRojoParametros;
 	private JLabel label;
 	private Metodo metodo;
+	private JTextFieldMejorado textFieldParametroNombre;
 
 
 
@@ -197,13 +199,13 @@ public class ModificarMetodo extends JFrame {
 
 
 
-		lblParmetros = new JLabel("Nombre:");
+		lblParmetros = new JLabel("Tipo de Dato:");
 		lblParmetros.setFont(new Font("Dialog", Font.BOLD, 12));
-		lblParmetros.setBounds(459, 59, 113, 28);
+		lblParmetros.setBounds(501, 84, 98, 14);
 		contentPane.add(lblParmetros);
 
 		panel = new JPanel();
-		panel.setBounds(337, 68, 112, 122);
+		panel.setBounds(320, 47, 159, 147);
 		contentPane.add(panel);
 		panel.setLayout(new BorderLayout(0, 0));
 
@@ -240,35 +242,35 @@ public class ModificarMetodo extends JFrame {
 		addParametrosDefualtTable();
 		scrollPane.setViewportView(table);
 
-		textFieldParam = new JTextFieldMejorado();
-		textFieldParam.addMouseListener(new MouseAdapter() {
+		textFieldParamTipoDeDato = new JTextFieldMejorado();
+		textFieldParamTipoDeDato.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				textFieldParam.requestFocus();
+				textFieldParamTipoDeDato.requestFocus();
 			}
 		});
-		textFieldParam.addKeyListener(new KeyAdapter() {
+		textFieldParamTipoDeDato.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent arg0) {
-				if(textFieldParam.getSelectedText()==null)
-					textFieldParam.setText(textFieldParam.getText().trim());
+				if(textFieldParamTipoDeDato.getSelectedText()==null)
+					textFieldParamTipoDeDato.setText(textFieldParamTipoDeDato.getText().trim());
 			}
 		});
-		textFieldParam.setLimite(30);
-		textFieldParam.setBounds(459, 87, 96, 20);
-		contentPane.add(textFieldParam);
-		textFieldParam.setColumns(10);
+		textFieldParamTipoDeDato.setLimite(30);
+		textFieldParamTipoDeDato.setBounds(501, 101, 98, 20);
+		contentPane.add(textFieldParamTipoDeDato);
+		textFieldParamTipoDeDato.setColumns(10);
 
 		panelPlus = new JPanel();
-		panelPlus.setBounds(530, 144, 50, 50);
+		panelPlus.setBounds(549, 144, 50, 50);
 		panelPlus.setBackground(new Color(153,204,204));
 		panelPlus.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(!textFieldParam.getText().equals("")){
-					Parametro para = new Parametro(textFieldParam.getText());
-					((ParametroTableModel) table.getModel()).adicionar(para);
-					textFieldParam.setText("");
+				if(!textFieldParamTipoDeDato.getText().equals("") && !textFieldParametroNombre.getText().equals("")){ // HACER VERIFICACION DE DUPLICIDAD DE PARAMETROS
+					((ParametroTableModel) table.getModel()).adicionar(textFieldParamTipoDeDato.getText(), textFieldParametroNombre.getText());
+					textFieldParamTipoDeDato.setText("");
+					textFieldParametroNombre.setText("");
 				}
 			}
 			@Override
@@ -289,7 +291,7 @@ public class ModificarMetodo extends JFrame {
 		labelPlus.setIcon(new ImageIcon(AgregarMetodo.class.getResource("/images/plus.png")));
 
 		panelMinus = new JPanel();
-		panelMinus.setBounds(459, 144, 50, 50);
+		panelMinus.setBounds(489, 144, 50, 50);
 		panelMinus.setBackground(new Color(153,204,204));
 		panelMinus.addMouseListener(new MouseAdapter() {
 			@Override
@@ -339,12 +341,12 @@ public class ModificarMetodo extends JFrame {
 
 		lblAadir = new JLabel("A\u00F1adir:");
 		lblAadir.setFont(new Font("Dialog", Font.BOLD, 12));
-		lblAadir.setBounds(530, 121, 50, 24);
+		lblAadir.setBounds(549, 132, 50, 14);
 		contentPane.add(lblAadir);
 
 		lblRemover = new JLabel("Remover:");
 		lblRemover.setFont(new Font("Dialog", Font.BOLD, 12));
-		lblRemover.setBounds(456, 121, 61, 24);
+		lblRemover.setBounds(489, 132, 61, 14);
 		contentPane.add(lblRemover);
 
 		labelRojoParametros = new JLabel("Primero seleccione el par\u00E1metro a remover");
@@ -368,13 +370,13 @@ public class ModificarMetodo extends JFrame {
 		contentPane.add(label);
 
 		JSeparator separator_2 = new JSeparator();
-		separator_2.setBounds(331, 47, 252, 2);
+		separator_2.setBounds(337, 34, 252, 2);
 		contentPane.add(separator_2);
 
 		JLabel lblAadirParmetro = new JLabel("A\u00F1adir Par\u00E1metro:");
 		lblAadirParmetro.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAadirParmetro.setFont(new Font("Dialog", Font.BOLD, 14));
-		lblAadirParmetro.setBounds(333, 23, 250, 24);
+		lblAadirParmetro.setBounds(337, 11, 250, 24);
 		contentPane.add(lblAadirParmetro);
 
 		addTextFieldNombre();
@@ -423,13 +425,13 @@ public class ModificarMetodo extends JFrame {
 	}
 
 	private void addTextFieldTipoDato () {
-		textFieldTipoDato = new JTextField(metodo.getTipoRetorno());
+		textFieldTipoDato = new JTextField(((MetodoOrdinario) metodo).getTipoRetorno());
 		textFieldTipoDato.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
 
 				if (textFieldTipoDato.getText().equalsIgnoreCase("")){
-					textFieldTipoDato.setText(metodo.getTipoRetorno());
+					textFieldTipoDato.setText(((MetodoOrdinario) metodo).getTipoRetorno());
 					textFieldTipoDato.setForeground(Color.white);
 				}
 			}
@@ -446,7 +448,7 @@ public class ModificarMetodo extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				textFieldTipoDato.requestFocus();
-				if(textFieldTipoDato.getText().equalsIgnoreCase(metodo.getTipoRetorno())){
+				if(textFieldTipoDato.getText().equalsIgnoreCase(((MetodoOrdinario) metodo).getTipoRetorno())){
 					textFieldTipoDato.setText("");
 					textFieldTipoDato.setForeground(Color.black);
 				}
@@ -488,7 +490,7 @@ public class ModificarMetodo extends JFrame {
 		rdbtnConcreto.setBounds(149, 83, 91, 23);
 		contentPane.add(rdbtnConcreto);
 
-		if(metodo.isAbstracto())
+		if(((MetodoOrdinario) metodo).isAbstracto())
 			rdbtnAbstracto.setSelected(true);
 		else
 			rdbtnConcreto.setSelected(true);
@@ -496,6 +498,17 @@ public class ModificarMetodo extends JFrame {
 		bg = new ButtonGroup();
 		bg.add(rdbtnConcreto);
 		bg.add(rdbtnAbstracto);
+		
+		JLabel lblNombre = new JLabel("Nombre:");
+		lblNombre.setFont(new Font("Dialog", Font.BOLD, 12));
+		lblNombre.setBounds(501, 42, 71, 14);
+		contentPane.add(lblNombre);
+		
+		textFieldParametroNombre = new JTextFieldMejorado();
+		textFieldParametroNombre.setLimite(30);
+		textFieldParametroNombre.setColumns(10);
+		textFieldParametroNombre.setBounds(501, 60, 98, 20);
+		contentPane.add(textFieldParametroNombre);
 
 	}
 
@@ -508,7 +521,7 @@ public class ModificarMetodo extends JFrame {
 		int cantRows = ((ParametroTableModel)table.getModel()).getRowCount();
 
 		for(int i=0 ;i<cantRows;i++ ){
-			parametros.add(new Parametro(String.valueOf(((ParametroTableModel)table.getModel()).getValueAt(i, 0))));
+			parametros.add(new Parametro(String.valueOf(((ParametroTableModel)table.getModel()).getValueAt(i, 0)), String.valueOf(((ParametroTableModel)table.getModel()).getValueAt(i, 1)))); // TEMPORAL
 
 		}
 
@@ -582,14 +595,12 @@ public class ModificarMetodo extends JFrame {
 		ArrayList<Parametro> parametros = metodo.getParametros();
 
 		for(int i=0; i<parametros.size();i++){
-			((ParametroTableModel) table.getModel()).adicionar(new Parametro(parametros.get(i).getTipoDato()));
+			((ParametroTableModel) table.getModel()).adicionar(parametros.get(i).getTipoDato(), parametros.get(i).getNombre()); // TEMPORAL
 		}
 	}
 
 	private void modificarMetodo(){
-		GestorUML.getInstancie().getProyectoSeleccionado().getDiagramaSeleccionado().modificarMetodo(metodo, textFieldNombre.getText(), textFieldTipoDato.getText(), determinarModificadorDeAcceso(), determinarAbstraccion(), obtenerParametrosTabla()); // Se modifica el metodo
+		GestorUML.getInstancie().getProyectoSeleccionado().getDiagramaSeleccionado().modificarMetodoOrdinario(metodo, textFieldNombre.getText(), textFieldTipoDato.getText(), determinarModificadorDeAcceso(), determinarAbstraccion(), obtenerParametrosTabla()); // Se modifica el metodo
 		pe.actualizarMetodos(); // se actualiza la informacion de los metodos en caso de modificacion
-		pe.actualizarDimensionesClase(); // se actualiza las dimensiones de la clase en caso de que el atributo exceda los limites de la clase
 	}
-
 }

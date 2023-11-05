@@ -15,8 +15,11 @@ import javax.swing.JScrollPane;
 import javax.swing.BoxLayout;
 import Clases.Diagrama;
 import Clases.GestorUML;
-import util.LabelDiagrama;
+import util.PanelDiagrama;
 import java.util.Iterator;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.FlowLayout;
 
 
 public class DiagramasAbrir extends JFrame {
@@ -108,20 +111,23 @@ public class DiagramasAbrir extends JFrame {
 		panelSalvas = new JPanel();
 		panelSalvas.setBackground(new Color(153, 204, 204));
 		scrollPane.setViewportView(panelSalvas);
-		panelSalvas.setLayout(new BoxLayout(panelSalvas, BoxLayout.Y_AXIS));
+		panelSalvas.setLayout(new BoxLayout(panelSalvas, BoxLayout.PAGE_AXIS));
 
 		llenarPanel();
 
 
 	}
 
-	private void llenarPanel(){
+	public void llenarPanel(){
 		Iterator<Diagrama> iterDiagramasProyecto =  GestorUML.getInstancie().getProyectoSeleccionado().obtenerDiagramas().iterator(); // se obtienen todos los diagramas del proyecto
-
+		panelSalvas.removeAll();
 		// se adicionan al panel en forma de labels
 		while (iterDiagramasProyecto.hasNext()) {
-			panelSalvas.add(new LabelDiagrama(iterDiagramasProyecto.next(), DiagramasAbrir.this));
+			panelSalvas.add(new PanelDiagrama(iterDiagramasProyecto.next(), DiagramasAbrir.this));
 		}
+
+		panelSalvas.repaint();
+		panelSalvas.revalidate();
 
 	}
 }
